@@ -1,0 +1,687 @@
+Influencer Promotion Brokerage Platform
+Business Requirement & Policy Document (India)
+1. Company Overview
+
+Business Name: (Your Company Name)
+
+Business Type: Influencer Marketing Brokerage Platform
+
+Business Model:
+The company acts as an intermediary between businesses and social media influencers. Businesses submit promotion requirements, and the company connects them with suitable influencers. The company earns a brokerage/service commission on every successful deal.
+
+2. Business Workflow
+Step 1 – Business Registration
+
+Businesses register on the platform and provide:
+
+Company Name
+GST Number (if applicable)
+PAN
+Contact Details
+Billing Address
+Brand Information
+Website & Social Links
+Step 2 – Campaign Creation
+
+Business submits:
+
+Product/Service Name
+Promotion Type
+Target Audience
+Budget
+Campaign Duration
+Content Guidelines
+Required Platforms
+Deliverables
+Step 3 – Influencer Selection
+
+The platform suggests influencers based on:
+
+YouTube
+Instagram
+Facebook
+X
+LinkedIn
+Snapchat
+Other Platforms
+
+Parameters:
+
+Followers
+Engagement Rate
+Audience Location
+Category
+Previous Performance
+Price
+Step 4 – Deal Confirmation
+
+Both parties accept:
+
+Price
+Deliverables
+Posting Date
+Content Requirements
+Payment Terms
+
+Digital agreement is generated.
+
+Step 5 – Payment Collection
+
+Business pays the total campaign amount to the company.
+
+Example:
+
+Campaign Value = ₹100,000
+
+Company Commission (20%) = ₹20,000
+
+Influencer Payment = ₹80,000
+
+Company releases payment to the influencer only after deliverables are verified according to the agreement.
+
+Step 6 – Campaign Verification
+
+Verification includes:
+
+Post Uploaded
+Story Uploaded
+Video Published
+Link Added
+Minimum Time Requirement
+Screenshot Proof
+Analytics Submission
+Step 7 – Payment Release
+
+After verification:
+
+Company transfers the influencer's share.
+
+Invoice is generated automatically.
+
+3. Revenue Model
+
+Company Commission
+
+Standard Commission:
+20%
+
+Optional Services
+
+Campaign Management Fee
+Urgent Campaign Charges
+Premium Listing
+Brand Verification Fee
+Influencer Verification Fee
+4. Tax Structure (India)
+GST
+
+If applicable under Indian law, the company should register for GST.
+
+Service:
+Digital Marketing / Advertising / Influencer Marketing Services
+
+GST may apply on the company's taxable services as per prevailing GST rules.
+
+GST Invoice should include:
+
+GSTIN
+Invoice Number
+HSN/SAC Code (as applicable)
+CGST
+SGST / IGST
+Taxable Value
+Total Amount
+TDS
+
+Where applicable under Indian Income Tax provisions, Tax Deducted at Source (TDS) may need to be deducted before releasing payment to influencers or vendors.
+
+Maintain:
+
+PAN
+Bank Details
+TDS Records
+Form 16A (where applicable)
+Income Tax
+
+The company must maintain:
+
+Sales Register
+Purchase Register
+Profit & Loss
+Balance Sheet
+Audit Records (if applicable)
+5. Refund Policy
+
+Business Cancellation
+
+Before influencer accepts:
+100% refund (excluding processing fee, if any)
+
+After acceptance:
+Refund subject to work completed and agreement terms.
+
+After campaign completion:
+No refund unless contract terms provide otherwise.
+
+6. Influencer Cancellation Policy
+
+If influencer cancels after accepting:
+
+Warning
+Penalty (if agreed)
+Rating Reduction
+Possible Account Suspension
+7. Business Cancellation Policy
+
+If business cancels after content creation:
+
+Business must pay for completed work as defined in the agreement.
+
+8. Company Responsibilities
+
+The company will:
+
+Match businesses with influencers
+Manage communication
+Collect payments
+Verify deliverables
+Release payments
+Resolve disputes
+Generate invoices
+Maintain records
+
+The company does not guarantee sales, revenue, or business growth from any campaign.
+
+9. Influencer Responsibilities
+
+Influencer agrees to:
+
+Publish original content
+Follow platform guidelines
+Avoid copyright violations
+Meet deadlines
+Submit analytics
+Follow advertising disclosure requirements where applicable
+10. Business Responsibilities
+
+Business agrees to:
+
+Provide accurate information
+Own rights to products/services promoted
+Avoid prohibited or illegal products/services
+Pay on time
+Provide campaign assets promptly
+11. Dispute Resolution
+
+Disputes shall first be attempted to be resolved through mutual discussion.
+
+If unresolved:
+
+Jurisdiction:
+Courts having jurisdiction at the registered office location of the company, unless otherwise agreed.
+
+12. Prohibited Categories
+
+The platform will not promote:
+
+Illegal Products
+Drugs
+Gambling (unless legally permitted)
+Adult Content
+Fake Investment Schemes
+Counterfeit Goods
+Hate Speech
+Terrorism-related content
+Financial Frauds
+Misleading Medical Claims
+13. Data Privacy
+
+Company collects:
+
+Name
+Email
+Mobile
+GST Details
+PAN (where required)
+Bank Details
+Analytics
+Billing Information
+
+Data will be stored securely and used only for business purposes in accordance with applicable law.
+
+14. Software Modules
+
+Business Panel
+
+Dashboard
+Campaign Management
+Payments
+Invoice
+Chat
+Analytics
+Contracts
+
+Influencer Panel
+
+Profile
+Portfolio
+Pricing
+Campaigns
+Earnings
+Withdrawals
+Ratings
+
+Admin Panel
+
+User Management
+Campaign Approval
+Escrow Management
+Commission Management
+GST Reports
+TDS Reports
+Invoice Generator
+Dispute Resolution
+Analytics Dashboard
+15. Required Documents
+
+Businesses
+
+GST Certificate (if applicable)
+PAN
+CIN (where applicable)
+Address Proof
+
+Influencers
+
+PAN
+Aadhaar (if required for KYC)
+Bank Details
+Social Media Links
+16. Required Agreements
+Business Service Agreement
+Influencer Agreement
+Non-Disclosure Agreement (NDA), where required
+Campaign Agreement
+Invoice
+Payment Receipt
+Refund Policy
+Privacy Policy
+Terms & Conditions
+17. Security Features
+OTP Login
+Two-Factor Authentication
+Role-Based Access Control
+Encrypted Data Storage
+Payment Audit Logs
+Activity Logs
+Fraud Detection
+Secure Escrow Workflow
+18. Recommended Technology Stack
+
+Frontend:
+
+React
+React Native (Mobile App)
+
+Backend:
+
+Node.js
+Express.js
+
+Database:
+
+PostgreSQL
+
+Storage:
+
+Object Storage (e.g. S3-compatible)
+
+Authentication:
+
+JWT + OTP
+
+Payments:
+
+Razorpay / PhonePe Payment Gateway or another compliant payment provider
+
+Hosting:
+
+Cloud Infrastructure
+19. Commission Example
+
+Campaign Amount: ₹50,000
+
+Company Commission (20%): ₹10,000
+
+Influencer Receives: ₹40,000
+
+GST, TDS, and other statutory deductions (if applicable) should be calculated and applied in accordance with prevailing Indian laws and the parties' tax status.
+
+20. Legal Disclaimer
+
+This document is a business blueprint and should be reviewed by a qualified Chartered Accountant (CA) and legal professional before implementation. Tax treatment, GST, TDS, contractual terms, and regulatory compliance may vary depending on applicable laws and the facts of each transaction.
+
+यदि आप इसे Production-Level PRD (100–150 pages) में बदलना चाहते हैं, तो मैं इसमें निम्नलिखित भी जोड़ सकता हूँ:
+
+ER Diagram (Database Design)
+200+ API Documentation
+Complete PostgreSQL Database Schema (100+ Tables)
+Admin Panel Screens
+Business Panel UI/UX
+Influencer Panel UI/UX
+Payment Escrow Flow
+GST & TDS Automation Logic
+Invoice & Ledger System
+Wallet System
+Dispute Resolution Module
+AI Influencer Recommendation Engine
+Notification & Email System
+Complete Software Architecture (Enterprise Level)
+
+यह ऐसा डॉक्यूमेंट होगा जिसे सीधे डेवलपमेंट टीम के साथ साझा करके सॉफ़्टवेयर बनाना शुरू किया जा सकता है।
+
+यदि आप इसे Production-Level PRD (100–150 pages) में बदलना चाहते हैं, तो मैं इसमें निम्नलिखित भी जोड़ सकता हूँ:
+
+ER Diagram (Database Design)
+200+ API Documentation
+Complete PostgreSQL Database Schema (100+ Tables)
+Admin Panel Screens
+Business Panel UI/UX
+Influencer Panel UI/UX
+Payment Escrow Flow
+GST & TDS Automation Logic
+Invoice & Ledger System
+Wallet System
+Dispute Resolution Module
+AI Influencer Recommendation Engine
+Notification & Email System
+Complete Software Architecture (Enterprise Level)
+
+हाँ, यह सब शामिल करके Production-Level PRD (100–150+ Pages) बनाया जा सकता है। बल्कि यदि आपका लक्ष्य एक स्टार्टअप बनाना है, तो मैं इसे 200–300 पेज के Enterprise Software Specification के रूप में डिज़ाइन करने की सलाह दूँगा ताकि डेवलपर्स बिना अनुमान लगाए सिस्टम बना सकें।
+
+इस PRD का प्रस्तावित स्ट्रक्चर कुछ इस प्रकार होगा:
+
+Section	अनुमानित पेज
+Executive Summary	5
+Business Requirements	15
+Functional Requirements	30
+User Roles & Permissions	12
+Complete UI/UX Screens (200+ Screens)	40
+Database Design (ER Diagram + 100+ Tables)	35
+API Documentation (200+ APIs)	60
+Payment & Escrow System	15
+Wallet System	10
+GST & TDS Automation	20
+Invoice & Accounting	15
+Notification System	10
+AI Recommendation Engine	20
+Security & Compliance	20
+Deployment & DevOps	15
+Testing (QA)	25
+Appendix	15
+
+कुल मिलाकर यह लगभग 350–450 पेज का Enterprise दस्तावेज़ भी बन सकता है।
+
+इसमें क्या-क्या होगा
+1. Complete Product Requirement Document (PRD)
+Business Vision
+Problem Statement
+Target Market
+Revenue Model
+Competitor Analysis
+User Journey
+Complete Workflow
+2. System Architecture
+React Web
+React Native App
+
+        │
+
+API Gateway
+
+        │
+
+Node.js Backend
+
+        │
+
+Redis
+
+        │
+
+PostgreSQL
+
+        │
+
+Object Storage
+
+        │
+
+Payment Gateway
+
+        │
+
+Notification Service
+
+        │
+
+AI Recommendation Engine
+3. Database
+
+100+ Tables जैसे:
+
+Users
+Businesses
+Influencers
+Campaigns
+Campaign Requests
+Deliverables
+Wallet
+Wallet Transactions
+GST Records
+TDS Records
+Escrow Accounts
+Withdrawals
+Reviews
+Ratings
+Chat
+Notifications
+Support Tickets
+Invoice
+Invoice Items
+Contracts
+Disputes
+Commission
+Analytics
+Audit Logs
+
+और भी कई टेबल।
+
+4. API Documentation
+
+लगभग 250 APIs
+
+उदाहरण:
+
+POST /auth/register
+
+POST /auth/login
+
+POST /business/create
+
+POST /campaign/create
+
+GET /campaign/list
+
+POST /campaign/apply
+
+POST /payment/initiate
+
+POST /wallet/withdraw
+
+POST /invoice/generate
+
+GET /analytics
+5. Admin Panel
+Dashboard
+User Management
+Business Approval
+Influencer Verification
+KYC Approval
+Commission Management
+Escrow Management
+GST Report
+TDS Report
+Wallet Report
+Invoice Report
+Revenue Report
+Analytics
+Support Tickets
+AI Recommendation Control
+6. Business Dashboard
+Create Campaign
+Budget
+Chat
+Contract
+Analytics
+Invoice
+Wallet
+Refund
+Review
+Team Members
+7. Influencer Dashboard
+Portfolio
+Media Kit
+Followers Analytics
+Campaign Offers
+Earnings
+Wallet
+Withdraw
+Performance Graph
+Reviews
+8. AI Engine
+
+AI करेगा:
+
+Best Influencer Suggest
+Fake Followers Detection
+Engagement Analysis
+Budget Recommendation
+Audience Match
+Fraud Detection
+Spam Detection
+9. Wallet System
+
+हर User के पास Wallet
+
+Available Balance
+
+Pending Balance
+
+Escrow Balance
+
+Withdrawable Balance
+
+Commission
+
+GST
+
+TDS
+10. Escrow Flow
+Business Pays
+
+↓
+
+Money Locked
+
+↓
+
+Influencer Completes Work
+
+↓
+
+Verification
+
+↓
+
+Commission Deduct
+
+↓
+
+GST
+
+↓
+
+TDS
+
+↓
+
+Remaining Amount
+
+↓
+
+Influencer Wallet
+
+↓
+
+Bank Transfer
+11. Accounting
+GST Invoice
+Credit Note
+Debit Note
+Ledger
+Journal
+Profit & Loss
+Balance Sheet
+Revenue Report
+Commission Report
+12. Security
+JWT
+OAuth
+OTP Login
+Two-Factor Authentication
+Device Management
+Encryption
+Audit Logs
+Rate Limiting
+DDoS Protection
+RBAC (Role-Based Access Control)
+13. DevOps
+Docker
+Kubernetes
+CI/CD
+Nginx
+PM2
+Monitoring
+Logging
+Backup
+Disaster Recovery
+14. Testing
+Unit Testing
+API Testing
+Load Testing
+Security Testing
+Penetration Testing
+UAT
+Automation Testing
+अतिरिक्त फीचर जो इस प्लेटफ़ॉर्म को बेहतर बना सकते हैं
+AI Contract Generator
+AI Campaign Brief Generator
+WhatsApp Integration
+Email Automation
+SMS OTP
+Video Meeting Integration
+Digital Signature
+E-KYC
+Multi-language Support
+Referral System
+Coupon Engine
+Subscription Plans
+Brand Verification Badge
+Influencer Verification Badge
+Mobile Apps (Android + iOS)
+Super Admin + Regional Admin
+CRM Module
+Affiliate Program
+Advanced Analytics Dashboard
+AI Chat Assistant

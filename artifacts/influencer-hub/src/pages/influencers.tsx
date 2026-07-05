@@ -1,0 +1,116 @@
+import { useState } from "react";
+import { useListInfluencers } from "@workspace/api-client-react";
+import { Link } from "wouter";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatCompactNumber, formatINR } from "@/lib/format";
+import { Search } from "lucide-react";
+
+export default function Influencers() {
+  // Using simple local state since wouter search params aren't natively supported out of the box in this snippet
+  const [platform, setPlatform] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
+
+  const { data: influencers, isLoading } = useListInfluencers({
+    platform: platform === "all" ? undefined : platform || undefined,
+    category: category === "all" ? undefined : category || undefined,
+    search: search || undefined
+  });
+
+  return (
+    <div className="container mx-auto px-4 py-12">
+      <div className="mb-12">
+        <h1 className="text-5xl mb-4">Directory</h1>
+        <p className="text-xl text-muted-foreground max-w-2xl">Discover and filter India's top creators by niche, platform, and performance metrics.</p>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-4 mb-8 bg-card p-4 border shadow-sm">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search by name or bio..." 
+            className="pl-9 rounded-none h-10 bg-transparent border-0 focus-visible:ring-0 text-base"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="w-px bg-border hidden md:block" />
+        <Select value={platform} onValueChange={setPlatform}>
+          <SelectTrigger className="w-full md:w-[200px] rounded-none border-0 focus:ring-0 shadow-none bg-transparent">
+            <SelectValue placeholder="All Platforms" />
+          </SelectTrigger>
+          <SelectContent className="rounded-none">
+            <SelectItem value="all">All Platforms</SelectItem>
+            <SelectItem value="Instagram">Instagram</SelectItem>
+            <SelectItem value="YouTube">YouTube</SelectItem>
+            <SelectItem value="LinkedIn">LinkedIn</SelectItem>
+            <SelectItem value="X">X</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="w-px bg-border hidden md:block" />
+        <Select value={category} onValueChange={setCategory}>
+          <SelectTrigger className="w-full md:w-[200px] rounded-none border-0 focus:ring-0 shadow-none bg-transparent">
+            <SelectValue placeholder="All Categories" />
+          </SelectTrigger>
+          <SelectContent className="rounded-none">
+            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="Tech">Tech</SelectItem>
+            <SelectItem value="Finance">Finance</SelectItem>
+            <SelectItem value="Fashion">Fashion</SelectItem>
+            <SelectItem value="Lifestyle">Lifestyle</SelectItem>
+            <SelectItem value="Business">Business</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {isLoading ? (
+          Array(8).fill(0).map((_, i) => <Skeleton key={i} className="h-80 w-full rounded-none" />)
+        ) : influencers?.length === 0 ? (
+          <div className="col-span-full py-24 text-center border bg-card">
+            <p className="text-xl text-muted-foreground">No creators found matching your criteria.</p>
+          </div>
+        ) : (
+          influencers?.map((inf) => (
+            <Link key={inf.id} href={`/influencers/${inf.id}`}>
+              <Card className="rounded-none border-border/50 hover:border-primary transition-colors cursor-pointer h-full group bg-card hover:shadow-lg flex flex-col">
+                <CardContent className="p-0 flex-1 flex flex-col">
+                  <div className="aspect-square bg-muted relative overflow-hidden">
+                    {inf.avatarUrl ? (
+                      <img src={inf.avatarUrl} alt={inf.name} className="object-cover w-full h-full grayscale group-hover:grayscale-0 transition-all duration-300" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center font-serif text-5xl text-muted-foreground bg-muted">
+                        {inf.name.charAt(0)}
+                      </div>
+                    )}
+                    <div className="absolute top-3 right-3 bg-background px-2 py-1 text-[10px] font-bold uppercase tracking-wider">
+                      {inf.platform}
+                    </div>
+                  </div>
+                  <div className="p-5 flex-1 flex flex-col">
+                    <h3 className="text-xl font-serif mb-1 group-hover:text-primary">{inf.name}</h3>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4">{inf.category}</p>
+                    
+                    <div className="mt-auto grid grid-cols-2 gap-4 border-t pt-4">
+                      <div>
+                        <div className="text-[10px] uppercase text-muted-foreground mb-1">Followers</div>
+                        <div className="font-medium">{formatCompactNumber(inf.followers)}</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase text-muted-foreground mb-1">Engagement</div>
+                        <div className="font-medium text-primary">{inf.engagementRate}%</div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}

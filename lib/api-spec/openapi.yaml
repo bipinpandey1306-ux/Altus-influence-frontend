@@ -10,6 +10,12 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: influencers
+    description: Influencer directory
+  - name: campaigns
+    description: Campaign / promotion requests submitted by businesses
+  - name: stats
+    description: Platform-wide aggregate stats
 paths:
   /healthz:
     get:
@@ -24,6 +30,118 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /stats/summary:
+    get:
+      operationId: getPlatformStats
+      tags: [stats]
+      summary: Get platform-wide stats for landing page
+      responses:
+        "200":
+          description: Platform stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformStats"
+
+  /influencers:
+    get:
+      operationId: listInfluencers
+      tags: [influencers]
+      summary: List influencers with optional filters
+      parameters:
+        - name: platform
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of influencers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Influencer"
+    post:
+      operationId: applyAsInfluencer
+      tags: [influencers]
+      summary: Submit an influencer application to join the platform
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateInfluencerInput"
+      responses:
+        "201":
+          description: Created influencer application
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Influencer"
+
+  /influencers/{id}:
+    get:
+      operationId: getInfluencer
+      tags: [influencers]
+      summary: Get a single influencer profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Influencer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Influencer"
+        "404":
+          description: Not found
+
+  /campaigns:
+    get:
+      operationId: listCampaigns
+      tags: [campaigns]
+      summary: List submitted campaign requests
+      responses:
+        "200":
+          description: List of campaign requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CampaignRequest"
+    post:
+      operationId: createCampaign
+      tags: [campaigns]
+      summary: Submit a new campaign / promotion request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCampaignInput"
+      responses:
+        "201":
+          description: Created campaign request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CampaignRequest"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +152,186 @@ components:
       required:
         - status
 
+    PlatformStats:
+      type: object
+      properties:
+        totalInfluencers:
+          type: integer
+        totalBusinesses:
+          type: integer
+        totalCampaigns:
+          type: integer
+        totalPayoutsInr:
+          type: number
+        avgEngagementRate:
+          type: number
+      required:
+        - totalInfluencers
+        - totalBusinesses
+        - totalCampaigns
+        - totalPayoutsInr
+        - avgEngagementRate
+
+    Influencer:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        platform:
+          type: string
+          description: "Primary platform, e.g. Instagram, YouTube, Facebook, X, LinkedIn, Snapchat"
+        category:
+          type: string
+          description: "e.g. Fashion, Tech, Fitness, Food, Travel, Finance"
+        followers:
+          type: integer
+        engagementRate:
+          type: number
+          description: Percentage engagement rate
+        location:
+          type: string
+        pricePerPostInr:
+          type: number
+        rating:
+          type: number
+        bio:
+          type: string
+        avatarUrl:
+          type: string
+        status:
+          type: string
+          enum: [pending, verified]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - platform
+        - category
+        - followers
+        - engagementRate
+        - location
+        - pricePerPostInr
+        - rating
+        - bio
+        - avatarUrl
+        - status
+        - createdAt
+
+    CreateInfluencerInput:
+      type: object
+      properties:
+        name:
+          type: string
+        platform:
+          type: string
+        category:
+          type: string
+        followers:
+          type: integer
+        engagementRate:
+          type: number
+        location:
+          type: string
+        pricePerPostInr:
+          type: number
+        bio:
+          type: string
+        avatarUrl:
+          type: string
+      required:
+        - name
+        - platform
+        - category
+        - followers
+        - location
+        - pricePerPostInr
+        - bio
+
+    CampaignRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        businessName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        productName:
+          type: string
+        promotionType:
+          type: string
+        targetAudience:
+          type: string
+        budgetInr:
+          type: number
+        durationDays:
+          type: integer
+        platforms:
+          type: array
+          items:
+            type: string
+        deliverables:
+          type: string
+        status:
+          type: string
+          enum: [new, matching, in_progress, completed]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - businessName
+        - contactEmail
+        - contactPhone
+        - productName
+        - promotionType
+        - targetAudience
+        - budgetInr
+        - durationDays
+        - platforms
+        - deliverables
+        - status
+        - createdAt
+
+    CreateCampaignInput:
+      type: object
+      properties:
+        businessName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        productName:
+          type: string
+        promotionType:
+          type: string
+        targetAudience:
+          type: string
+        budgetInr:
+          type: number
+        durationDays:
+          type: integer
+        platforms:
+          type: array
+          items:
+            type: string
+        deliverables:
+          type: string
+      required:
+        - businessName
+        - contactEmail
+        - contactPhone
+        - productName
+        - promotionType
+        - targetAudience
+        - budgetInr
+        - durationDays
+        - platforms
+        - deliverables
