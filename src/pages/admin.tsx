@@ -86,6 +86,36 @@ export default function AdminPanel() {
   const updateMutation = useUpdateInfluencer();
   const deleteMutation = useDeleteInfluencer();
 
+  const [chatMessages, setChatMessages] = useState<Array<{ id: string; sender: 'user' | 'support'; text: string; time: string; timestamp: string }>>(() => {
+    try {
+      const all = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+      return all.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const handleDeleteChatMsg = (id: string) => {
+    if (confirm("Are you sure you want to delete this message?")) {
+      try {
+        const allMsgs = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+        const filtered = allMsgs.filter((m: any) => m.id !== id);
+        localStorage.setItem("ib_chat_messages", JSON.stringify(filtered));
+        setChatMessages(filtered.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
+        toast({
+          title: "Message Deleted",
+          description: "Successfully removed chat log entry.",
+        });
+      } catch (e) {
+        toast({
+          variant: "destructive",
+          title: "Delete Failed",
+          description: "Could not remove message.",
+        });
+      }
+    }
+  };
+
   const form = useForm<FormValues>({
     resolver: zodResolver(influencerSchema),
     defaultValues: {
@@ -606,6 +636,88 @@ export default function AdminPanel() {
             </div>
           </Card>
         </div>
+      </div>
+
+      {/* Live Customer Messages Box */}
+      <div className="mt-12 border-t border-border/60 pt-10">
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-3xl font-serif font-bold text-foreground">Live Customer Chat Inquiries</h2>
+            <p className="text-sm text-muted-foreground mt-1">View messages typed by visitors using the floating chat widget.</p>
+          </div>
+          <Button
+            variant="outline"
+            className="rounded-none text-xs uppercase font-bold tracking-wider"
+            onClick={() => {
+              try {
+                const all = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+                setChatMessages(all.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
+                toast({
+                  title: "Refreshed Inbox",
+                  description: "Loaded latest chat messages from memory.",
+                });
+              } catch (e) {
+                // ignore
+              }
+            }}
+          >
+            Refresh Inbox
+          </Button>
+        </div>
+        
+        <Card className="rounded-none border-border shadow-md overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-secondary text-secondary-foreground text-xs uppercase tracking-wider border-b">
+                <tr>
+                  <th className="px-6 py-4 w-1/4">Date / Time</th>
+                  <th className="px-6 py-4 w-1/5">Sender</th>
+                  <th className="px-6 py-4">Message Content</th>
+                  <th className="px-6 py-4 text-center w-24">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/60">
+                {chatMessages.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="text-center py-12 text-muted-foreground">
+                      No chat messages received yet. Submit one from the floating widget to test!
+                    </td>
+                  </tr>
+                ) : (
+                  chatMessages.map((msg) => (
+                    <tr key={msg.id} className="hover:bg-muted/50 transition-colors">
+                      <td className="px-6 py-4 text-xs font-mono text-muted-foreground">
+                        {new Date(msg.timestamp).toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4 font-semibold">
+                        <span className={`px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${
+                          msg.sender === 'user' 
+                            ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' 
+                            : 'bg-primary/10 text-primary border border-primary/20'
+                        }`}>
+                          {msg.sender === 'user' ? 'Visitor (Client)' : 'Altus Support (Bot)'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-pre-wrap break-all text-foreground text-xs">
+                        {msg.text}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive rounded-none"
+                          onClick={() => handleDeleteChatMsg(msg.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Card>
       </div>
     </div>
   );

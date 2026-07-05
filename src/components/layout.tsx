@@ -47,6 +47,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     
     const newMsgId = whatsAppMessages.length + 1;
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const userTimestamp = new Date().toISOString();
     
     const newMsg = {
       id: newMsgId,
@@ -58,17 +59,50 @@ export function Layout({ children }: { children: React.ReactNode }) {
     setWhatsAppMessages(prev => [...prev, newMsg]);
     setWhatsAppMessage("");
 
+    // Save to localStorage for Admin Panel reading
+    try {
+      const stored = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+      stored.push({
+        id: Math.random().toString(36).substring(2, 9),
+        sender: 'user',
+        text: userText,
+        time: timeStr,
+        timestamp: userTimestamp
+      });
+      localStorage.setItem("ib_chat_messages", JSON.stringify(stored));
+    } catch (err) {
+      console.error("Failed to save message to localStorage", err);
+    }
+
     // Simulate agent auto reply
     setTimeout(() => {
+      const botText = "Thank you for reaching out! We have received your query. A campaign manager will get in touch with you shortly.";
+      const botTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const botTimestamp = new Date().toISOString();
+
       setWhatsAppMessages(prev => [
         ...prev,
         {
           id: newMsgId + 1,
           sender: 'support' as const,
-          text: "Thank you for reaching out! We have received your query. A campaign manager will get in touch with you shortly.",
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          text: botText,
+          time: botTime
         }
       ]);
+
+      try {
+        const stored = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+        stored.push({
+          id: Math.random().toString(36).substring(2, 9),
+          sender: 'support',
+          text: botText,
+          time: botTime,
+          timestamp: botTimestamp
+        });
+        localStorage.setItem("ib_chat_messages", JSON.stringify(stored));
+      } catch (err) {
+        console.error("Failed to save bot reply to localStorage", err);
+      }
     }, 1000);
   };
 
