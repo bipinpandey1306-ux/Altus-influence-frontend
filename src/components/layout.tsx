@@ -88,42 +88,43 @@ export function Layout({ children }: { children: React.ReactNode }) {
             )}
           </button>
 
-          {/* Mobile Fullscreen Navigation Overlay */}
-          {mobileMenuOpen && (
-            <div className="md:hidden fixed inset-0 z-50 bg-background/98 backdrop-blur-md pt-20 px-6 flex flex-col gap-6 text-lg font-semibold uppercase tracking-wider animate-in fade-in slide-in-from-top duration-200 overflow-y-auto">
-              <button 
-                onClick={() => setMobileMenuOpen(false)} 
-                className="absolute top-6 right-6 p-2 text-foreground cursor-pointer"
-                aria-label="Close Menu"
-              >
-                <X className="w-6 h-6" />
-              </button>
-              
-              <Link href="/" onClick={() => setMobileMenuOpen(false)} className={location === "/" ? "text-primary" : "text-foreground"}>Our Work</Link>
-              
-              {/* Collapsible Mobile Services */}
-              <div className="flex flex-col gap-2">
-                <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold">Services</span>
-                <div className="pl-4 flex flex-col gap-3 font-normal normal-case text-base text-muted-foreground mt-1">
-                  <Link href="/influencers?platform=YouTube" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire YouTubers</Link>
-                  <Link href="/start-campaign?platform=YouTube&service=Production" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">YouTube Video Production</Link>
-                  <Link href="/influencers?platform=Instagram" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Instagrammers</Link>
-                  <Link href="/influencers" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Influencers</Link>
-                  <Link href="/influencers?tier=Micro" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Micro Influencers</Link>
-                  <Link href="/influencers?tier=Nano" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Nano Creators</Link>
-                  <Link href="/influencers?language=Hindi" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Regional Influencers</Link>
-                  <Link href="/influencers?tier=Mega" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Celebrity Influencers</Link>
-                </div>
-              </div>
-              
-              <Link href="/influencers" onClick={() => setMobileMenuOpen(false)} className={location.startsWith("/influencers") ? "text-primary" : "text-foreground"}>Creators</Link>
-              <Link href="/join-as-influencer" onClick={() => setMobileMenuOpen(false)} className={location === "/join-as-influencer" ? "text-primary" : "text-foreground"}>Barter</Link>
-              <Link href="/about" onClick={() => setMobileMenuOpen(false)} className={location === "/about" ? "text-primary" : "text-foreground"}>About</Link>
-              <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="text-primary font-bold">Admin Panel</Link>
-            </div>
-          )}
         </div>
       </header>
+
+      {/* Mobile Fullscreen Navigation Overlay */}
+      {mobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 z-50 bg-background/98 backdrop-blur-md pt-20 px-6 flex flex-col gap-6 text-lg font-semibold uppercase tracking-wider animate-in fade-in slide-in-from-top duration-200 overflow-y-auto">
+          <button 
+            onClick={() => setMobileMenuOpen(false)} 
+            className="absolute top-6 right-6 p-2 text-foreground cursor-pointer"
+            aria-label="Close Menu"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          
+          <Link href="/" onClick={() => setMobileMenuOpen(false)} className={location === "/" ? "text-primary" : "text-foreground"}>Our Work</Link>
+          
+          {/* Collapsible Mobile Services */}
+          <div className="flex flex-col gap-2">
+            <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold">Services</span>
+            <div className="pl-4 flex flex-col gap-3 font-normal normal-case text-base text-muted-foreground mt-1">
+              <Link href="/influencers?platform=YouTube" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire YouTubers</Link>
+              <Link href="/start-campaign?platform=YouTube&service=Production" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">YouTube Video Production</Link>
+              <Link href="/influencers?platform=Instagram" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Instagrammers</Link>
+              <Link href="/influencers" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Influencers</Link>
+              <Link href="/influencers?tier=Micro" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Micro Influencers</Link>
+              <Link href="/influencers?tier=Nano" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Nano Creators</Link>
+              <Link href="/influencers?language=Hindi" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Regional Influencers</Link>
+              <Link href="/influencers?tier=Mega" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Celebrity Influencers</Link>
+            </div>
+          </div>
+          
+          <Link href="/influencers" onClick={() => setMobileMenuOpen(false)} className={location.startsWith("/influencers") ? "text-primary" : "text-foreground"}>Creators</Link>
+          <Link href="/join-as-influencer" onClick={() => setMobileMenuOpen(false)} className={location === "/join-as-influencer" ? "text-primary" : "text-foreground"}>Barter</Link>
+          <Link href="/about" onClick={() => setMobileMenuOpen(false)} className={location === "/about" ? "text-primary" : "text-foreground"}>About</Link>
+          <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="text-primary font-bold">Admin Panel</Link>
+        </div>
+      )}
       <main className="flex-1 flex flex-col">
         {children}
       </main>
