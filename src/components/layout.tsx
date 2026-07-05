@@ -135,7 +135,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <Link href="/influencers" onClick={() => setMobileMenuOpen(false)} className={location.startsWith("/influencers") ? "text-primary" : "text-foreground"}>Creators</Link>
           <Link href="/join-as-influencer" onClick={() => setMobileMenuOpen(false)} className={location === "/join-as-influencer" ? "text-primary" : "text-foreground"}>Barter</Link>
           <Link href="/about" onClick={() => setMobileMenuOpen(false)} className={location === "/about" ? "text-primary" : "text-foreground"}>About</Link>
-          <Link href="/admin-secure-gate-bcp-89fbbac5" onClick={() => setMobileMenuOpen(false)} className="text-primary font-bold">Admin Panel</Link>
         </div>
       )}
       <main className="flex-1 flex flex-col">
@@ -203,7 +202,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <li><Link href="/start-campaign" className="hover:text-white transition-colors">Start Campaign</Link></li>
               <li><Link href="/join-as-influencer" className="hover:text-white transition-colors">Join as Creator</Link></li>
               <li><Link href="/asci-guidelines" className="hover:text-white transition-colors">ASCI Guidelines</Link></li>
-              <li><Link href="/admin-secure-gate-bcp-89fbbac5" className="hover:text-primary transition-colors text-primary font-medium">Admin Dashboard</Link></li>
             </ul>
           </div>
         </div>
