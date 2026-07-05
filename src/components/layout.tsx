@@ -250,6 +250,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </footer>
+
+      {/* Floating WhatsApp Option */}
+      <a
+        href="https://wa.me/919876543210?text=Hi!%20I'm%20interested%20in%20Altus%20Influence%20services.%20Let's%20discuss."
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 group cursor-pointer"
+        aria-label="WhatsApp Us"
+      >
+        {/* Glow / Pulse Effect */}
+        <span className="absolute inset-0 rounded-full bg-[#25D366]/40 animate-pulse scale-110 opacity-75 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        {/* Text Label Pill (Appears on hover) */}
+        <span className="bg-[#111827] text-white text-xs font-semibold uppercase tracking-wider px-3.5 py-2 rounded-full border border-white/10 shadow-lg translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap">
+          WhatsApp Us
+        </span>
+        
+        {/* WhatsApp Icon Circle */}
+        <div className="relative w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+          <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.067 5.248 5.313 0 11.783 0c3.137.001 6.086 1.222 8.31 3.448 2.224 2.226 3.455 5.171 3.453 8.31-.005 6.472-5.251 11.72-11.72 11.72-2.003-.001-3.972-.515-5.717-1.498L0 24zM6.48 5.621c-.244-.544-.502-.556-.733-.565-.19-.008-.407-.008-.624-.008-.217 0-.57.081-.869.408-.299.327-1.14 1.115-1.14 2.72 0 1.605 1.168 3.155 1.331 3.372.163.217 2.298 3.51 5.566 4.921 2.72 1.176 3.274.942 3.872.886.598-.056 1.928-.788 2.2-.1.508c.272-.734.272-1.36.19-1.498-.081-.137-.299-.218-.624-.38-.327-.163-1.928-.952-2.227-1.06-.299-.11-.517-.163-.733.163-.217.327-.842 1.06-1.032 1.277-.19.218-.38.245-.707.081-.327-.163-1.38-.508-2.63-1.624-1.05-.935-1.758-2.088-1.963-2.441-.205-.353-.022-.544.152-.716.157-.154.327-.38.49-.571.163-.19.217-.327.327-.544.11-.218.056-.408-.022-.571-.078-.163-.733-1.766-.991-2.39z" />
+          </svg>
+        </div>
+      </a>
     </div>
   );
 }
