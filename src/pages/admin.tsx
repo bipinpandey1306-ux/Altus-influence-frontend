@@ -194,7 +194,19 @@ export default function AdminPanel() {
     };
     
     const interval = setInterval(refreshInbox, 2000);
-    return () => clearInterval(interval);
+
+    // Instant sync across tabs
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "ib_chat_messages") {
+        refreshInbox();
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   // Group messages by sessionId to list active chats

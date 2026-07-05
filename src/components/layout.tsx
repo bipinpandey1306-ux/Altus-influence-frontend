@@ -85,9 +85,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
     };
 
     syncChat();
-    // Poll every 2 seconds
+    // Poll every 2 seconds as fallback
     const interval = setInterval(syncChat, 2000);
-    return () => clearInterval(interval);
+
+    // Instant sync across tabs
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "ib_chat_messages") {
+        syncChat();
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, [visitorSessionId]);
 
   const handleWhatsAppSend = (e: React.FormEvent) => {
