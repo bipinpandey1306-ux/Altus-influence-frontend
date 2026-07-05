@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { formatLakhs, formatCompactNumber } from "@/lib/format";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowRight, TrendingUp, Users, Target } from "lucide-react";
+import { ArrowRight, TrendingUp, Users, Target, PhoneCall, Sparkles, LineChart } from "lucide-react";
 
 export default function Home() {
   const { data: stats, isLoading: statsLoading } = useGetPlatformStats();
@@ -37,6 +37,48 @@ export default function Home() {
           </div>
         </div>
         <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-primary/5 to-transparent -z-10" />
+      </section>
+
+      {/* How It Works */}
+      <section className="py-24 bg-secondary text-secondary-foreground">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mb-16">
+            <span className="text-sm uppercase tracking-widest text-primary font-medium">How It Works</span>
+            <h2 className="text-4xl mt-4">From brief to brand impact, in three steps.</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="flex flex-col gap-4">
+              <div className="w-14 h-14 flex items-center justify-center border border-primary/30 text-primary">
+                <PhoneCall className="w-6 h-6" />
+              </div>
+              <span className="font-serif text-3xl text-primary">01</span>
+              <h3 className="text-xl font-serif">Tell us your goals</h3>
+              <p className="text-secondary-foreground/70 leading-relaxed">
+                Submit your campaign brief and budget. Our team reviews it and understands exactly what you want to achieve.
+              </p>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="w-14 h-14 flex items-center justify-center border border-primary/30 text-primary">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <span className="font-serif text-3xl text-primary">02</span>
+              <h3 className="text-xl font-serif">We match the right creators</h3>
+              <p className="text-secondary-foreground/70 leading-relaxed">
+                We hand-pick influencers from our vetted directory by platform, category, and audience fit for maximum resonance.
+              </p>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="w-14 h-14 flex items-center justify-center border border-primary/30 text-primary">
+                <LineChart className="w-6 h-6" />
+              </div>
+              <span className="font-serif text-3xl text-primary">03</span>
+              <h3 className="text-xl font-serif">Launch & track results</h3>
+              <p className="text-secondary-foreground/70 leading-relaxed">
+                Campaigns go live and we keep you updated, so every rupee spent translates into measurable brand impact.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Stats */}
