@@ -56,57 +56,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
     }
   }, [whatsAppMessages]);
 
-  // Load and sync messages from localStorage for this session
+  // Initialize with default greeting
   useEffect(() => {
-    const syncChat = () => {
-      try {
-        let storedRaw = localStorage.getItem("ib_chat_messages");
-        if (!storedRaw) {
-          localStorage.setItem("ib_chat_messages", JSON.stringify(initialChats));
-          storedRaw = JSON.stringify(initialChats);
-        }
-        const stored = JSON.parse(storedRaw);
-        const sessionMsgs = stored.filter((m: any) => m.sessionId === visitorSessionId);
-        
-        if (sessionMsgs.length > 0) {
-          const mapped = sessionMsgs.map((m: any) => ({
-            id: m.id,
-            sender: m.sender,
-            text: m.text,
-            time: m.time
-          }));
-          setWhatsAppMessages([
-            {
-              id: "init",
-              sender: 'support',
-              text: "Hello! 👋 How can we help you today? Please type your query below to start chatting with us.",
-              time: "Just now"
-            },
-            ...mapped
-          ]);
-        }
-      } catch (e) {
-        // ignore
+    setWhatsAppMessages([
+      {
+        id: "init",
+        sender: 'support',
+        text: "Hello! 👋 How can we help you today? Please type your query below to start chatting with us.",
+        time: "Just now"
       }
-    };
-
-    syncChat();
-    // Poll every 2 seconds as fallback
-    const interval = setInterval(syncChat, 2000);
-
-    // Instant sync across tabs
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "ib_chat_messages") {
-        syncChat();
-      }
-    };
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, [visitorSessionId]);
+    ]);
+  }, []);
 
   const handleWhatsAppSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,7 +82,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
     
     const newMsgId = Math.random().toString(36).substring(2, 9);
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const userTimestamp = new Date().toISOString();
     
     const newMsg = {
       id: newMsgId,
@@ -131,25 +90,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
       time: timeStr
     };
     
-    // Optimistic update
+    // Optimistic update so the user sees their message in the bubble trail
     setWhatsAppMessages(prev => [...prev, newMsg]);
     setWhatsAppMessage("");
 
-    // Save to localStorage for Admin Panel reading
-    try {
-      const stored = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
-      stored.push({
-        id: newMsgId,
-        sender: 'user',
-        text: userText,
-        time: timeStr,
-        timestamp: userTimestamp,
-        sessionId: visitorSessionId
-      });
-      localStorage.setItem("ib_chat_messages", JSON.stringify(stored));
-    } catch (err) {
-      console.error("Failed to save message to localStorage", err);
-    }
+    // Construct the WhatsApp URL and open in a new tab/window
+    const whatsappUrl = `https://wa.me/918881800808?text=${encodeURIComponent(userText)}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   const userSentCount = whatsAppMessages.filter(m => m.sender === 'user').length;
