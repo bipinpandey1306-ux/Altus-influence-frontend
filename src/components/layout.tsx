@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import altusLogoDark from "@/assets/altus-logo-dark.png";
@@ -23,18 +23,53 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [whatsAppChatOpen, setWhatsAppChatOpen] = useState(false);
   const [whatsAppMessage, setWhatsAppMessage] = useState("");
+  const [whatsAppMessages, setWhatsAppMessages] = useState<Array<{ id: number; sender: 'support' | 'user'; text: string; time: string }>>([
+    {
+      id: 1,
+      sender: 'support',
+      text: "Hello! 👋 How can we help you today? Please type your query below to start chatting with us.",
+      time: "Just now"
+    }
+  ]);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [whatsAppMessages]);
 
   const handleWhatsAppSend = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!whatsAppMessage.trim()) return;
+    const userText = whatsAppMessage.trim();
+    if (!userText) return;
     
-    const phoneNumber = "918881800808"; // Altus Support number
-    const encodedText = encodeURIComponent(whatsAppMessage);
-    const url = `https://wa.me/${phoneNumber}?text=${encodedText}`;
+    const newMsgId = whatsAppMessages.length + 1;
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     
-    window.open(url, "_blank", "noopener,noreferrer");
+    const newMsg = {
+      id: newMsgId,
+      sender: 'user' as const,
+      text: userText,
+      time: timeStr
+    };
+    
+    setWhatsAppMessages(prev => [...prev, newMsg]);
     setWhatsAppMessage("");
-    setWhatsAppChatOpen(false);
+
+    // Simulate agent auto reply
+    setTimeout(() => {
+      setWhatsAppMessages(prev => [
+        ...prev,
+        {
+          id: newMsgId + 1,
+          sender: 'support' as const,
+          text: "Thank you for reaching out! We have received your query. A campaign manager will get in touch with you shortly.",
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }
+      ]);
+    }, 1000);
   };
 
   return (
@@ -294,15 +329,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
             
             {/* Chat Messages Area */}
-            <div className="flex-1 p-4 bg-[#eae6df] max-h-60 overflow-y-auto space-y-3 relative">
+            <div className="flex-1 p-4 bg-[#eae6df] max-h-60 overflow-y-auto space-y-3 relative flex flex-col scrollbar-thin">
               {/* WhatsApp background watermark style overlay */}
               <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
               
-              <div className="bg-white text-gray-800 text-xs py-2 px-3 rounded-lg rounded-tl-none shadow-sm max-w-[85%] relative z-10 leading-relaxed text-left">
-                <p className="font-medium text-[#075E54] mb-0.5">Altus Influence Support</p>
-                <p>Hello! 👋 How can we help you today? Please type your query below to start chatting with us.</p>
-                <span className="text-[9px] text-gray-400 block text-right mt-1">Just now</span>
-              </div>
+              {whatsAppMessages.map((msg) => (
+                <div 
+                  key={msg.id}
+                  className={`text-xs py-2 px-3 rounded-lg shadow-sm max-w-[85%] relative z-10 leading-relaxed text-left ${
+                    msg.sender === 'user' 
+                      ? 'bg-[#d9fdd3] text-gray-800 rounded-tr-none ml-auto' 
+                      : 'bg-white text-gray-800 rounded-tl-none mr-auto'
+                  }`}
+                >
+                  {msg.sender === 'support' && (
+                    <p className="font-medium text-[#075E54] mb-0.5 text-[10px]">Altus Support</p>
+                  )}
+                  <p className="whitespace-pre-wrap break-words">{msg.text}</p>
+                  <span className="text-[9px] text-gray-400 block text-right mt-1">{msg.time}</span>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
             </div>
             
             {/* Footer Form */}
