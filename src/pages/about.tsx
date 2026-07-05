@@ -133,7 +133,7 @@ export default function AboutUs() {
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-primary" />
-                <span>+91 98765 43210</span>
+                <span>+91 88818 00808</span>
               </div>
             </div>
           </div>

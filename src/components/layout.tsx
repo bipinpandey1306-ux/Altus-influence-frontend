@@ -28,7 +28,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     e.preventDefault();
     if (!whatsAppMessage.trim()) return;
     
-    const phoneNumber = "919876543210"; // Altus Support number
+    const phoneNumber = "918881800808"; // Altus Support number
     const encodedText = encodeURIComponent(whatsAppMessage);
     const url = `https://wa.me/${phoneNumber}?text=${encodedText}`;
     
@@ -248,7 +248,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <span className="w-1.5 h-1.5 rounded-full bg-primary" /> support@influencebridge.com
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary" /> +91 98765 43210
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary" /> +91 88818 00808
                 </span>
               </div>
             </div>
