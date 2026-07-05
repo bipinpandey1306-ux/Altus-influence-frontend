@@ -40,7 +40,7 @@ function Router() {
         <Route path="/join-as-influencer" component={JoinInfluencer} />
         <Route path="/calculator" component={EarningsCalculator} />
         <Route path="/asci-guidelines" component={AsciGuidelines} />
-        <Route path="/admin" component={AdminPanel} />
+        <Route path="/portal-admin" component={AdminPanel} />
         <Route path="/about" component={AboutUs} />
         <Route component={NotFound} />
       </Switch>

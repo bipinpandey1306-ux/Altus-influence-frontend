@@ -18,7 +18,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { formatCompactNumber, formatINR } from "@/lib/format";
-import { Trash2, Edit2, Plus, Users, DollarSign, Activity, Check } from "lucide-react";
+import { Trash2, Edit2, Plus, Users, DollarSign, Activity, Check, Lock, LogOut } from "lucide-react";
+
+// SHA-256 hashing helper function
+async function sha256(message: string): Promise<string> {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+}
 
 // Form Validation Schema
 const influencerSchema = z.object({
@@ -44,6 +52,34 @@ export default function AdminPanel() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem("altus_admin_auth") === "true";
+  });
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    const hash = await sha256(password);
+    // Hashed value of "@12345@Bcp"
+    if (hash === "89fbbac5ad9ec312dfed68d6e577c706a146e136a07a6e40d26b8a57c9f31ee5") {
+      sessionStorage.setItem("altus_admin_auth", "true");
+      setIsAuthenticated(true);
+      toast({
+        title: "Welcome Back",
+        description: "Admin panel access authorized successfully.",
+      });
+    } else {
+      setError("Invalid administrator password.");
+      toast({
+        variant: "destructive",
+        title: "Access Denied",
+        description: "The password you entered is incorrect.",
+      });
+    }
+  };
 
   const { data: influencers, isLoading } = useListInfluencers({});
   const createMutation = useApplyAsInfluencer();
@@ -182,14 +218,71 @@ export default function AdminPanel() {
     }
   };
 
+  if (!isAuthenticated) {
+    return (
+      <div className="flex-1 flex items-center justify-center py-24 px-4 bg-gradient-to-br from-background via-[#fdfdfd] to-secondary/30">
+        <Card className="w-full max-w-md rounded-none border border-border shadow-xl bg-card p-8 flex flex-col gap-6 relative overflow-hidden">
+          {/* Subtle neon top border */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary" />
+          
+          <div className="text-center space-y-2">
+            <div className="mx-auto w-12 h-12 bg-primary/10 text-primary flex items-center justify-center border border-primary/20 mb-4">
+              <Lock className="w-6 h-6" />
+            </div>
+            <h2 className="text-3xl font-serif font-bold text-foreground">Admin Authorization</h2>
+            <p className="text-xs text-muted-foreground uppercase tracking-widest">Restricted Access Portal</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs uppercase tracking-wider font-bold text-foreground">Password</label>
+              <Input
+                type="password"
+                placeholder="Enter Administrator Password"
+                className="rounded-none h-12 bg-transparent text-base border-border focus-visible:ring-primary"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoFocus
+              />
+              {error && <p className="text-xs text-destructive font-medium mt-1">{error}</p>}
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-12 rounded-none uppercase text-xs font-bold tracking-widest bg-primary text-primary-foreground hover:bg-primary/95 transition-all mt-2"
+            >
+              Access Dashboard
+            </Button>
+          </form>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-12 max-w-7xl">
-      <div className="mb-10">
-        <span className="bg-primary/10 text-primary px-3 py-1 text-xs font-bold uppercase tracking-wider border border-primary/20">
-          Admin Portal
-        </span>
-        <h1 className="text-5xl font-serif mt-3 mb-2">Creator Management Dashboard</h1>
-        <p className="text-lg text-muted-foreground">Add, update, or remove influencers in the system database.</p>
+      <div className="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b border-border/60 pb-6">
+        <div>
+          <span className="bg-primary/10 text-primary px-3 py-1 text-xs font-bold uppercase tracking-wider border border-primary/20">
+            Admin Portal
+          </span>
+          <h1 className="text-5xl font-serif mt-3 mb-2">Creator Management Dashboard</h1>
+          <p className="text-lg text-muted-foreground">Add, update, or remove influencers in the system database.</p>
+        </div>
+        <Button 
+          variant="outline"
+          className="rounded-none uppercase text-xs font-bold tracking-widest border-destructive/30 hover:bg-destructive hover:text-white transition-colors h-11 px-6 flex items-center gap-2 self-start md:self-end"
+          onClick={() => {
+            sessionStorage.removeItem("altus_admin_auth");
+            setIsAuthenticated(false);
+            toast({
+              title: "Logged Out",
+              description: "You have been logged out of the admin panel.",
+            });
+          }}
+        >
+          <LogOut className="w-4 h-4" /> Logout
+        </Button>
       </div>
 
       {/* Stats Cards */}
