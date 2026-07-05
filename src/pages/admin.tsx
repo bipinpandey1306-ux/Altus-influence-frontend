@@ -136,9 +136,10 @@ export default function AdminPanel() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'creators' | 'chats'>('creators');
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return sessionStorage.getItem("altus_admin_auth") === "true";
+    return localStorage.getItem("altus_admin_auth") === "true";
   });
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -149,7 +150,7 @@ export default function AdminPanel() {
     const hash = await sha256(password);
     // Hashed value of "@12345@Bcp"
     if (hash === "89fbbac5ad9ec312dfed68d6e577c706a146e136a07a6e40d26b8a57c9f31ee5") {
-      sessionStorage.setItem("altus_admin_auth", "true");
+      localStorage.setItem("altus_admin_auth", "true");
       setIsAuthenticated(true);
       toast({
         title: "Welcome Back",
@@ -442,7 +443,7 @@ export default function AdminPanel() {
           variant="outline"
           className="rounded-none uppercase text-xs font-bold tracking-widest border-destructive/30 hover:bg-destructive hover:text-white transition-colors h-11 px-6 flex items-center gap-2 self-start md:self-end"
           onClick={() => {
-            sessionStorage.removeItem("altus_admin_auth");
+            localStorage.removeItem("altus_admin_auth");
             setIsAuthenticated(false);
             toast({
               title: "Logged Out",
@@ -453,6 +454,40 @@ export default function AdminPanel() {
           <LogOut className="w-4 h-4" /> Logout
         </Button>
       </div>
+
+      {/* Tabs Navigation */}
+      <div className="flex border-b border-border mb-8 gap-4">
+        <button
+          type="button"
+          onClick={() => setActiveTab('creators')}
+          className={`pb-4 px-2 text-sm font-bold uppercase tracking-wider transition-all border-b-2 flex items-center gap-2 cursor-pointer ${
+            activeTab === 'creators'
+              ? 'border-primary text-primary'
+              : 'border-transparent text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          <Users className="w-4 h-4" /> Creators Directory
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('chats')}
+          className={`pb-4 px-2 text-sm font-bold uppercase tracking-wider transition-all border-b-2 flex items-center gap-2 cursor-pointer relative ${
+            activeTab === 'chats'
+              ? 'border-primary text-primary'
+              : 'border-transparent text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          <Send className="w-4 h-4" /> Customer Live Chats
+          {chatSessions.length > 0 && (
+            <span className="absolute -top-1 -right-2 bg-emerald-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+              {chatSessions.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {activeTab === 'creators' ? (
+        <>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
@@ -776,8 +811,9 @@ export default function AdminPanel() {
           </Card>
         </div>
       </div>
-
-      {/* Live Customer Chat Box (WhatsApp-style split pane) */}
+        </>
+      ) : (
+        /* Live Customer Chat Box (WhatsApp-style split pane) */
       <div className="mt-12 border-t border-border/60 pt-10">
         <div className="mb-6">
           <h2 className="text-3xl font-serif font-bold text-foreground">Live Customer Chat Inquiries</h2>
@@ -937,6 +973,7 @@ export default function AdminPanel() {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 }
