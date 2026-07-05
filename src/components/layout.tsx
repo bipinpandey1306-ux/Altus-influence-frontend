@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import altusLogoDark from "@/assets/altus-logo-dark.png";
 import altusLogoLight from "@/assets/altus-logo-light.png";
-import { ChevronDown, ChevronRight, Instagram, Youtube, Linkedin, Facebook, Twitter, Menu, X } from "lucide-react";
+import { ChevronDown, ChevronUp, ChevronRight, Instagram, Youtube, Linkedin, Facebook, Twitter, Menu, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +20,7 @@ import {
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -106,17 +107,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
           
           {/* Collapsible Mobile Services */}
           <div className="flex flex-col gap-2">
-            <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold">Services</span>
-            <div className="pl-4 flex flex-col gap-3 font-normal normal-case text-base text-muted-foreground mt-1">
-              <Link href="/influencers?platform=YouTube" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire YouTubers</Link>
-              <Link href="/start-campaign?platform=YouTube&service=Production" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">YouTube Video Production</Link>
-              <Link href="/influencers?platform=Instagram" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Instagrammers</Link>
-              <Link href="/influencers" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Influencers</Link>
-              <Link href="/influencers?tier=Micro" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Micro Influencers</Link>
-              <Link href="/influencers?tier=Nano" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Nano Creators</Link>
-              <Link href="/influencers?language=Hindi" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Regional Influencers</Link>
-              <Link href="/influencers?tier=Mega" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Celebrity Influencers</Link>
-            </div>
+            <button 
+              onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+              className="flex items-center justify-between text-muted-foreground text-[10px] uppercase tracking-widest font-bold w-full cursor-pointer py-1 text-left focus:outline-none"
+            >
+              <span>Services</span>
+              {mobileServicesOpen ? (
+                <ChevronUp className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5" />
+              )}
+            </button>
+            {mobileServicesOpen && (
+              <div className="pl-4 flex flex-col gap-3 font-normal normal-case text-base text-muted-foreground mt-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                <Link href="/influencers?platform=YouTube" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire YouTubers</Link>
+                <Link href="/start-campaign?platform=YouTube&service=Production" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">YouTube Video Production</Link>
+                <Link href="/influencers?platform=Instagram" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Instagrammers</Link>
+                <Link href="/influencers" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Influencers</Link>
+                <Link href="/influencers?tier=Micro" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Micro Influencers</Link>
+                <Link href="/influencers?tier=Nano" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Nano Creators</Link>
+                <Link href="/influencers?language=Hindi" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Regional Influencers</Link>
+                <Link href="/influencers?tier=Mega" onClick={() => setMobileMenuOpen(false)} className="hover:text-primary transition-colors">Hire Celebrity Influencers</Link>
+              </div>
+            )}
           </div>
           
           <Link href="/influencers" onClick={() => setMobileMenuOpen(false)} className={location.startsWith("/influencers") ? "text-primary" : "text-foreground"}>Creators</Link>
