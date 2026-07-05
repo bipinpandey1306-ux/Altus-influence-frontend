@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import altusLogoDark from "@/assets/altus-logo-dark.png";
 import altusLogoLight from "@/assets/altus-logo-light.png";
-import { ChevronDown, ChevronUp, ChevronRight, Instagram, Youtube, Linkedin, Facebook, Twitter, Menu, X } from "lucide-react";
+import { ChevronDown, ChevronUp, ChevronRight, Instagram, Youtube, Linkedin, Facebook, Twitter, Menu, X, Send } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [whatsAppChatOpen, setWhatsAppChatOpen] = useState(false);
+  const [whatsAppMessage, setWhatsAppMessage] = useState("");
+
+  const handleWhatsAppSend = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!whatsAppMessage.trim()) return;
+    
+    const phoneNumber = "919876543210"; // Altus Support number
+    const encodedText = encodeURIComponent(whatsAppMessage);
+    const url = `https://wa.me/${phoneNumber}?text=${encodedText}`;
+    
+    window.open(url, "_blank", "noopener,noreferrer");
+    setWhatsAppMessage("");
+    setWhatsAppChatOpen(false);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -251,18 +266,81 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </footer>
 
-      {/* Floating WhatsApp Option */}
-      <a
-        href="https://wa.me/919876543210?text=Hi!%20I'm%20interested%20in%20Altus%20Influence%20services.%20Let's%20discuss."
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-2xl flex items-center justify-center transition-transform duration-300 hover:scale-110 cursor-pointer"
-        aria-label="WhatsApp Us"
-      >
-        <svg className="w-8 h-8 fill-current text-white" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
-          <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
-        </svg>
-      </a>
+      {/* Floating WhatsApp Chat Widget */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 font-sans">
+        {/* Chat Pop-up Box */}
+        {whatsAppChatOpen && (
+          <div className="w-80 sm:w-96 bg-card border border-border shadow-2xl rounded-2xl overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300">
+            {/* Header */}
+            <div className="bg-[#075E54] text-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm relative border border-white/10 text-white">
+                  AI
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#25D366] border-2 border-[#075E54]" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm leading-tight text-white">Altus Support</h4>
+                  <p className="text-[10px] text-white/80 uppercase tracking-wider mt-0.5">Typically replies instantly</p>
+                </div>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setWhatsAppChatOpen(false)}
+                className="text-white/80 hover:text-white hover:bg-white/10 p-1.5 rounded-full transition-colors cursor-pointer"
+                aria-label="Close Chat"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            
+            {/* Chat Messages Area */}
+            <div className="flex-1 p-4 bg-[#eae6df] max-h-60 overflow-y-auto space-y-3 relative">
+              {/* WhatsApp background watermark style overlay */}
+              <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
+              
+              <div className="bg-white text-gray-800 text-xs py-2 px-3 rounded-lg rounded-tl-none shadow-sm max-w-[85%] relative z-10 leading-relaxed text-left">
+                <p className="font-medium text-[#075E54] mb-0.5">Altus Influence Support</p>
+                <p>Hello! 👋 How can we help you today? Please type your query below to start chatting with us.</p>
+                <span className="text-[9px] text-gray-400 block text-right mt-1">Just now</span>
+              </div>
+            </div>
+            
+            {/* Footer Form */}
+            <form onSubmit={handleWhatsAppSend} className="p-3 bg-secondary border-t border-border flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="Type your message..."
+                className="flex-1 bg-background text-sm px-4 py-2.5 border border-border focus:outline-none focus:border-primary rounded-full text-foreground"
+                value={whatsAppMessage}
+                onChange={(e) => setWhatsAppMessage(e.target.value)}
+                autoFocus
+              />
+              <button
+                type="submit"
+                className="w-10 h-10 rounded-full bg-[#00a884] hover:bg-[#008f72] text-white flex items-center justify-center shadow transition-colors cursor-pointer"
+                aria-label="Send WhatsApp message"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </form>
+          </div>
+        )}
+        
+        {/* Toggle Button */}
+        <button
+          onClick={() => setWhatsAppChatOpen(!whatsAppChatOpen)}
+          className="w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-2xl flex items-center justify-center transition-transform duration-300 hover:scale-110 cursor-pointer focus:outline-none"
+          aria-label="Toggle WhatsApp chat"
+        >
+          {whatsAppChatOpen ? (
+            <X className="w-6 h-6 text-white" />
+          ) : (
+            <svg className="w-8 h-8 fill-current text-white" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+              <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
+            </svg>
+          )}
+        </button>
+      </div>
     </div>
   );
 }
