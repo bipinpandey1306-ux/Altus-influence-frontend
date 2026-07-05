@@ -1,0 +1,10 @@
+[
+  {
+    "id": "init-greeting",
+    "sender": "support",
+    "text": "Hello! 👋 How can we help you today? Please type your query below to start chatting with us.",
+    "time": "Just now",
+    "timestamp": "2026-07-05T12:00:00.000Z",
+    "sessionId": "GLOBAL"
+  }
+]

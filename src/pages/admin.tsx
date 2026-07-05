@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import initialChats from "@/lib/initial_chats.json";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -173,7 +174,12 @@ export default function AdminPanel() {
 
   const [chatMessages, setChatMessages] = useState<Array<{ id: string; sender: 'user' | 'support'; text: string; time: string; timestamp: string; sessionId?: string }>>(() => {
     try {
-      return JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+      const stored = localStorage.getItem("ib_chat_messages");
+      if (!stored) {
+        localStorage.setItem("ib_chat_messages", JSON.stringify(initialChats));
+        return initialChats;
+      }
+      return JSON.parse(stored);
     } catch (e) {
       return [];
     }
@@ -186,8 +192,10 @@ export default function AdminPanel() {
   useEffect(() => {
     const refreshInbox = () => {
       try {
-        const all = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
-        setChatMessages(all);
+        const stored = localStorage.getItem("ib_chat_messages");
+        if (stored) {
+          setChatMessages(JSON.parse(stored));
+        }
       } catch (e) {
         // ignore
       }

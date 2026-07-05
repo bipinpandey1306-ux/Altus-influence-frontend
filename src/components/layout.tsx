@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import altusLogoDark from "@/assets/altus-logo-dark.png";
 import altusLogoLight from "@/assets/altus-logo-light.png";
 import { ChevronDown, ChevronUp, ChevronRight, Instagram, Youtube, Linkedin, Facebook, Twitter, Menu, X, Send } from "lucide-react";
+import initialChats from "@/lib/initial_chats.json";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,7 +60,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const syncChat = () => {
       try {
-        const stored = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+        let storedRaw = localStorage.getItem("ib_chat_messages");
+        if (!storedRaw) {
+          localStorage.setItem("ib_chat_messages", JSON.stringify(initialChats));
+          storedRaw = JSON.stringify(initialChats);
+        }
+        const stored = JSON.parse(storedRaw);
         const sessionMsgs = stored.filter((m: any) => m.sessionId === visitorSessionId);
         
         if (sessionMsgs.length > 0) {
@@ -106,6 +112,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
     e.preventDefault();
     const userText = whatsAppMessage.trim();
     if (!userText) return;
+
+    // Strict 50 messages limit per user ID
+    const userSentCount = whatsAppMessages.filter(m => m.sender === 'user').length;
+    if (userSentCount >= 50) {
+      alert("You have reached the maximum limit of 50 messages per session.");
+      return;
+    }
     
     const newMsgId = Math.random().toString(36).substring(2, 9);
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -138,6 +151,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       console.error("Failed to save message to localStorage", err);
     }
   };
+
+  const userSentCount = whatsAppMessages.filter(m => m.sender === 'user').length;
+  const isLimitReached = userSentCount >= 50;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -416,6 +432,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <span className="text-[9px] text-gray-400 block text-right mt-1">{msg.time}</span>
                 </div>
               ))}
+              {isLimitReached && (
+                <div className="text-[10px] text-center text-red-600 bg-red-50 p-2.5 border border-red-200 rounded-lg mx-2 my-1.5 relative z-10 leading-normal">
+                  🚫 You have reached the limit of 50 messages for this chat.
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
             
@@ -423,15 +444,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <form onSubmit={handleWhatsAppSend} className="p-3 bg-secondary border-t border-border flex items-center gap-2">
               <input
                 type="text"
-                placeholder="Type your message..."
-                className="flex-1 bg-background text-sm px-4 py-2.5 border border-border focus:outline-none focus:border-primary rounded-full text-foreground"
+                disabled={isLimitReached}
+                placeholder={isLimitReached ? "Limit of 50 chats reached." : "Type your message..."}
+                className="flex-1 bg-background disabled:bg-muted disabled:text-muted-foreground text-sm px-4 py-2.5 border border-border focus:outline-none focus:border-primary rounded-full text-foreground"
                 value={whatsAppMessage}
                 onChange={(e) => setWhatsAppMessage(e.target.value)}
                 autoFocus
               />
               <button
                 type="submit"
-                className="w-10 h-10 rounded-full bg-[#00a884] hover:bg-[#008f72] text-white flex items-center justify-center shadow transition-colors cursor-pointer"
+                disabled={isLimitReached}
+                className="w-10 h-10 rounded-full bg-[#00a884] hover:bg-[#008f72] disabled:bg-muted disabled:text-muted-foreground text-white flex items-center justify-center shadow transition-colors cursor-pointer"
                 aria-label="Send WhatsApp message"
               >
                 <Send className="w-4 h-4" />
