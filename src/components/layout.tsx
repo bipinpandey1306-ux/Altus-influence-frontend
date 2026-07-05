@@ -23,9 +23,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [whatsAppChatOpen, setWhatsAppChatOpen] = useState(false);
   const [whatsAppMessage, setWhatsAppMessage] = useState("");
-  const [whatsAppMessages, setWhatsAppMessages] = useState<Array<{ id: number; sender: 'support' | 'user'; text: string; time: string }>>([
+  
+  // Unique Session ID for the Visitor
+  const [visitorSessionId] = useState(() => {
+    try {
+      let id = localStorage.getItem("altus_visitor_session_id");
+      if (!id) {
+        id = "Visitor-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+        localStorage.setItem("altus_visitor_session_id", id);
+      }
+      return id;
+    } catch (e) {
+      return "Visitor-GUEST";
+    }
+  });
+
+  const [whatsAppMessages, setWhatsAppMessages] = useState<Array<{ id: string | number; sender: 'support' | 'user'; text: string; time: string }>>([
     {
-      id: 1,
+      id: "init",
       sender: 'support',
       text: "Hello! 👋 How can we help you today? Please type your query below to start chatting with us.",
       time: "Just now"
@@ -40,12 +55,47 @@ export function Layout({ children }: { children: React.ReactNode }) {
     }
   }, [whatsAppMessages]);
 
+  // Load and sync messages from localStorage for this session
+  useEffect(() => {
+    const syncChat = () => {
+      try {
+        const stored = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+        const sessionMsgs = stored.filter((m: any) => m.sessionId === visitorSessionId);
+        
+        if (sessionMsgs.length > 0) {
+          const mapped = sessionMsgs.map((m: any) => ({
+            id: m.id,
+            sender: m.sender,
+            text: m.text,
+            time: m.time
+          }));
+          setWhatsAppMessages([
+            {
+              id: "init",
+              sender: 'support',
+              text: "Hello! 👋 How can we help you today? Please type your query below to start chatting with us.",
+              time: "Just now"
+            },
+            ...mapped
+          ]);
+        }
+      } catch (e) {
+        // ignore
+      }
+    };
+
+    syncChat();
+    // Poll every 2 seconds
+    const interval = setInterval(syncChat, 2000);
+    return () => clearInterval(interval);
+  }, [visitorSessionId]);
+
   const handleWhatsAppSend = (e: React.FormEvent) => {
     e.preventDefault();
     const userText = whatsAppMessage.trim();
     if (!userText) return;
     
-    const newMsgId = whatsAppMessages.length + 1;
+    const newMsgId = Math.random().toString(36).substring(2, 9);
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const userTimestamp = new Date().toISOString();
     
@@ -56,6 +106,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       time: timeStr
     };
     
+    // Optimistic update
     setWhatsAppMessages(prev => [...prev, newMsg]);
     setWhatsAppMessage("");
 
@@ -63,47 +114,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
     try {
       const stored = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
       stored.push({
-        id: Math.random().toString(36).substring(2, 9),
+        id: newMsgId,
         sender: 'user',
         text: userText,
         time: timeStr,
-        timestamp: userTimestamp
+        timestamp: userTimestamp,
+        sessionId: visitorSessionId
       });
       localStorage.setItem("ib_chat_messages", JSON.stringify(stored));
     } catch (err) {
       console.error("Failed to save message to localStorage", err);
     }
-
-    // Simulate agent auto reply
-    setTimeout(() => {
-      const botText = "Thank you for reaching out! We have received your query. A campaign manager will get in touch with you shortly.";
-      const botTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const botTimestamp = new Date().toISOString();
-
-      setWhatsAppMessages(prev => [
-        ...prev,
-        {
-          id: newMsgId + 1,
-          sender: 'support' as const,
-          text: botText,
-          time: botTime
-        }
-      ]);
-
-      try {
-        const stored = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
-        stored.push({
-          id: Math.random().toString(36).substring(2, 9),
-          sender: 'support',
-          text: botText,
-          time: botTime,
-          timestamp: botTimestamp
-        });
-        localStorage.setItem("ib_chat_messages", JSON.stringify(stored));
-      } catch (err) {
-        console.error("Failed to save bot reply to localStorage", err);
-      }
-    }, 1000);
   };
 
   return (

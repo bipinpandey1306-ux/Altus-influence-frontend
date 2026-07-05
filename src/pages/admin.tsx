@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { formatCompactNumber, formatINR } from "@/lib/format";
-import { Trash2, Edit2, Plus, Users, DollarSign, Activity, Check, Lock, LogOut } from "lucide-react";
+import { Trash2, Edit2, Plus, Users, DollarSign, Activity, Check, Lock, LogOut, Send } from "lucide-react";
 
 // SHA-256 hashing helper function
 async function sha256(message: string): Promise<string> {
@@ -86,33 +86,88 @@ export default function AdminPanel() {
   const updateMutation = useUpdateInfluencer();
   const deleteMutation = useDeleteInfluencer();
 
-  const [chatMessages, setChatMessages] = useState<Array<{ id: string; sender: 'user' | 'support'; text: string; time: string; timestamp: string }>>(() => {
+  const [chatMessages, setChatMessages] = useState<Array<{ id: string; sender: 'user' | 'support'; text: string; time: string; timestamp: string; sessionId?: string }>>(() => {
     try {
-      const all = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
-      return all.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      return JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
     } catch (e) {
       return [];
     }
   });
 
-  const handleDeleteChatMsg = (id: string) => {
-    if (confirm("Are you sure you want to delete this message?")) {
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+  const [adminReplyText, setAdminReplyText] = useState("");
+
+  // Sync / refresh chat messages from localStorage every 2 seconds
+  useEffect(() => {
+    const refreshInbox = () => {
       try {
-        const allMsgs = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
-        const filtered = allMsgs.filter((m: any) => m.id !== id);
-        localStorage.setItem("ib_chat_messages", JSON.stringify(filtered));
-        setChatMessages(filtered.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
-        toast({
-          title: "Message Deleted",
-          description: "Successfully removed chat log entry.",
-        });
+        const all = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+        setChatMessages(all);
       } catch (e) {
-        toast({
-          variant: "destructive",
-          title: "Delete Failed",
-          description: "Could not remove message.",
-        });
+        // ignore
       }
+    };
+    
+    const interval = setInterval(refreshInbox, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Group messages by sessionId to list active chats
+  const chatSessions = useMemo(() => {
+    const sessionsMap: { [key: string]: { sessionId: string; lastMessage: string; lastTimestamp: string; messages: typeof chatMessages } } = {};
+    
+    // Sort all messages chronologically first (oldest to newest) to process history
+    const sorted = [...chatMessages].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+    
+    sorted.forEach(msg => {
+      const sId = msg.sessionId || "Visitor-GUEST";
+      if (!sessionsMap[sId]) {
+        sessionsMap[sId] = {
+          sessionId: sId,
+          lastMessage: "",
+          lastTimestamp: "",
+          messages: []
+        };
+      }
+      sessionsMap[sId].messages.push(msg);
+      sessionsMap[sId].lastMessage = msg.text;
+      sessionsMap[sId].lastTimestamp = msg.timestamp;
+    });
+    
+    // Convert to array and sort by last message timestamp desc (recent conversations on top)
+    return Object.values(sessionsMap).sort((a, b) => new Date(b.lastTimestamp).getTime() - new Date(a.lastTimestamp).getTime());
+  }, [chatMessages]);
+
+  const handleAdminSendReply = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedSessionId || !adminReplyText.trim()) return;
+    
+    const replyText = adminReplyText.trim();
+    const newMsgId = Math.random().toString(36).substring(2, 9);
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const timestampStr = new Date().toISOString();
+    
+    try {
+      const allMsgs = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+      const newReply = {
+        id: newMsgId,
+        sender: 'support' as const,
+        text: replyText,
+        time: timeStr,
+        timestamp: timestampStr,
+        sessionId: selectedSessionId
+      };
+      
+      allMsgs.push(newReply);
+      localStorage.setItem("ib_chat_messages", JSON.stringify(allMsgs));
+      setChatMessages(allMsgs);
+      setAdminReplyText("");
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "Reply Failed",
+        description: "Could not deliver your reply.",
+      });
     }
   };
 
@@ -638,86 +693,165 @@ export default function AdminPanel() {
         </div>
       </div>
 
-      {/* Live Customer Messages Box */}
+      {/* Live Customer Chat Box (WhatsApp-style split pane) */}
       <div className="mt-12 border-t border-border/60 pt-10">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-serif font-bold text-foreground">Live Customer Chat Inquiries</h2>
-            <p className="text-sm text-muted-foreground mt-1">View messages typed by visitors using the floating chat widget.</p>
-          </div>
-          <Button
-            variant="outline"
-            className="rounded-none text-xs uppercase font-bold tracking-wider"
-            onClick={() => {
-              try {
-                const all = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
-                setChatMessages(all.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
-                toast({
-                  title: "Refreshed Inbox",
-                  description: "Loaded latest chat messages from memory.",
-                });
-              } catch (e) {
-                // ignore
-              }
-            }}
-          >
-            Refresh Inbox
-          </Button>
+        <div className="mb-6">
+          <h2 className="text-3xl font-serif font-bold text-foreground">Live Customer Chat Inquiries</h2>
+          <p className="text-sm text-muted-foreground mt-1">Chat in real-time with visitors on your website.</p>
         </div>
         
-        <Card className="rounded-none border-border shadow-md overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-secondary text-secondary-foreground text-xs uppercase tracking-wider border-b">
-                <tr>
-                  <th className="px-6 py-4 w-1/4">Date / Time</th>
-                  <th className="px-6 py-4 w-1/5">Sender</th>
-                  <th className="px-6 py-4">Message Content</th>
-                  <th className="px-6 py-4 text-center w-24">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/60">
-                {chatMessages.length === 0 ? (
-                  <tr>
-                    <td colSpan={4} className="text-center py-12 text-muted-foreground">
-                      No chat messages received yet. Submit one from the floating widget to test!
-                    </td>
-                  </tr>
-                ) : (
-                  chatMessages.map((msg) => (
-                    <tr key={msg.id} className="hover:bg-muted/50 transition-colors">
-                      <td className="px-6 py-4 text-xs font-mono text-muted-foreground">
-                        {new Date(msg.timestamp).toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4 font-semibold">
-                        <span className={`px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${
-                          msg.sender === 'user' 
-                            ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' 
-                            : 'bg-primary/10 text-primary border border-primary/20'
-                        }`}>
-                          {msg.sender === 'user' ? 'Visitor (Client)' : 'Altus Support (Bot)'}
+        <div className="grid grid-cols-1 md:grid-cols-12 border border-border bg-card shadow-lg min-h-[500px] max-h-[600px] overflow-hidden rounded-xl">
+          {/* Sidebar - active sessions list (4 cols) */}
+          <div className="md:col-span-4 border-r border-border flex flex-col bg-secondary/20">
+            <div className="p-4 border-b border-border bg-secondary/40 flex items-center justify-between">
+              <span className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Active Chats</span>
+              <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">
+                {chatSessions.length} Active
+              </span>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto divide-y divide-border/60">
+              {chatSessions.length === 0 ? (
+                <div className="p-8 text-center text-xs text-muted-foreground">
+                  No active customer conversations yet.
+                </div>
+              ) : (
+                chatSessions.map((session) => {
+                  const isSelected = selectedSessionId === session.sessionId;
+                  return (
+                    <button
+                      key={session.sessionId}
+                      type="button"
+                      onClick={() => setSelectedSessionId(session.sessionId)}
+                      className={`w-full p-4 flex flex-col gap-1.5 transition-colors text-left focus:outline-none cursor-pointer ${
+                        isSelected 
+                          ? 'bg-primary/5 border-l-4 border-primary' 
+                          : 'hover:bg-muted/50 border-l-4 border-transparent'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center w-full">
+                        <span className="font-semibold text-sm text-foreground">{session.sessionId}</span>
+                        <span className="text-[9px] text-muted-foreground font-mono">
+                          {new Date(session.lastTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-pre-wrap break-all text-foreground text-xs">
-                        {msg.text}
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8 text-muted-foreground hover:text-destructive rounded-none"
-                          onClick={() => handleDeleteChatMsg(msg.id)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                      </div>
+                      <p className="text-xs text-muted-foreground truncate w-full pr-4">
+                        {session.lastMessage}
+                      </p>
+                    </button>
+                  );
+                })
+              )}
+            </div>
           </div>
-        </Card>
+          
+          {/* Chat Window Area (8 cols) */}
+          <div className="md:col-span-8 flex flex-col bg-[#eae6df] relative min-h-[450px]">
+            {/* WhatsApp background watermark style overlay */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px] z-0" />
+            
+            {selectedSessionId ? (
+              <>
+                {/* Chat window Header */}
+                <div className="p-4 border-b border-border/60 bg-card flex items-center justify-between relative z-10">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs border border-primary/20">
+                      V
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm leading-tight text-foreground">{selectedSessionId}</h4>
+                      <p className="text-[10px] text-emerald-600 flex items-center gap-1.5 font-medium mt-0.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Active Session
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs text-destructive hover:bg-destructive/10 rounded-none h-8"
+                    onClick={() => {
+                      if (confirm(`Delete entire chat history for ${selectedSessionId}?`)) {
+                        try {
+                          const all = JSON.parse(localStorage.getItem("ib_chat_messages") || "[]");
+                          const filtered = all.filter((m: any) => m.sessionId !== selectedSessionId);
+                          localStorage.setItem("ib_chat_messages", JSON.stringify(filtered));
+                          setChatMessages(filtered);
+                          setSelectedSessionId(null);
+                          toast({
+                            title: "Chat History Cleared",
+                            description: "Removed all session messages.",
+                          });
+                        } catch (e) {
+                          // ignore
+                        }
+                      }
+                    }}
+                  >
+                    Clear History
+                  </Button>
+                </div>
+                
+                {/* Chat window Messages Body */}
+                <div className="flex-1 p-6 overflow-y-auto space-y-4 flex flex-col relative z-10 max-h-[380px]">
+                  {/* Default welcome message simulation in UI */}
+                  <div className="bg-white text-gray-800 text-xs py-2 px-3 rounded-lg rounded-tl-none shadow-sm max-w-[80%] self-start border border-border/30">
+                    <p className="font-semibold text-[#075E54] text-[10px] mb-0.5">Altus Support</p>
+                    <p>Hello! 👋 How can we help you today? Please type your query below to start chatting with us.</p>
+                    <span className="text-[8px] text-gray-400 block text-right mt-1">Just now</span>
+                  </div>
+
+                  {chatMessages
+                    .filter(m => (m.sessionId || "Visitor-GUEST") === selectedSessionId)
+                    .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+                    .map((msg) => (
+                      <div
+                        key={msg.id}
+                        className={`text-xs py-2 px-3 rounded-lg shadow-sm max-w-[80%] break-words ${
+                          msg.sender === 'support'
+                            ? 'bg-[#d9fdd3] text-gray-800 rounded-tr-none self-end ml-auto'
+                            : 'bg-white text-gray-800 rounded-tl-none self-start mr-auto border border-border/30'
+                        }`}
+                      >
+                        {msg.sender === 'support' && (
+                          <p className="font-semibold text-[#075E54] text-[10px] mb-0.5">Altus Support (You)</p>
+                        )}
+                        <p className="whitespace-pre-wrap">{msg.text}</p>
+                        <span className="text-[8px] text-gray-400 block text-right mt-1">{msg.time}</span>
+                      </div>
+                    ))}
+                </div>
+                
+                {/* Chat window Footer Form */}
+                <form onSubmit={handleAdminSendReply} className="p-3 bg-card border-t border-border flex items-center gap-2 relative z-10">
+                  <input
+                    type="text"
+                    placeholder="Type a reply..."
+                    className="flex-1 bg-secondary/40 text-sm px-4 py-2.5 border border-border focus:outline-none focus:border-primary rounded-full text-foreground"
+                    value={adminReplyText}
+                    onChange={(e) => setAdminReplyText(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    className="w-10 h-10 rounded-full bg-primary hover:bg-primary/95 text-white flex items-center justify-center shadow transition-colors cursor-pointer"
+                    aria-label="Send reply"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </form>
+              </>
+            ) : (
+              <div className="flex-1 flex flex-col items-center justify-center text-center p-8 relative z-10 text-muted-foreground gap-3">
+                <svg className="w-12 h-12 text-muted-foreground/50 fill-current" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
+                </svg>
+                <div className="max-w-xs space-y-1">
+                  <h5 className="font-bold text-foreground">Select a customer chat</h5>
+                  <p className="text-xs">Click on any active visitor in the sidebar to review messages and reply in real-time.</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
