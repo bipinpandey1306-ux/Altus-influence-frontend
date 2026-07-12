@@ -99,47 +99,21 @@ export default function AboutUs() {
       </div>
 
       {/* Office Hubs & Contacts */}
-      <div className="border-t border-border/20 pt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div>
-          <h2 className="text-3xl font-serif text-white font-semibold mb-6">Our Operations Hubs</h2>
-          <div className="space-y-6">
-            <div className="flex gap-4 items-start">
-              <MapPin className="w-5 h-5 text-accent mt-1 shrink-0" />
-              <div>
-                <strong className="text-base text-white font-semibold block uppercase tracking-wider text-xs">Bangalore (Tech Hub)</strong>
-                <span className="text-sm text-gray-300">Oravate Technologies, MG Road Corporate Hub, Bengaluru, Karnataka - 560001</span>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <MapPin className="w-5 h-5 text-accent mt-1 shrink-0" />
-              <div>
-                <strong className="text-base text-white font-semibold block uppercase tracking-wider text-xs">Mumbai (Creative Hub)</strong>
-                <span className="text-sm text-gray-300">Altus Influence Studios, BKC Business Plaza, Mumbai, Maharashtra - 400051</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-card/60 backdrop-blur-md p-8 border border-border rounded-2xl flex flex-col justify-between shadow-md">
+      <div className="border-t border-border/20 pt-16 max-w-xl mx-auto relative z-10">
+        <div className="bg-card/60 backdrop-blur-md p-8 md:p-12 border border-border rounded-2xl flex flex-col justify-between shadow-md text-center">
           <div>
-            <h3 className="text-2xl font-serif text-white font-semibold mb-4">Get In Touch</h3>
+            <h3 className="text-3xl font-serif text-white font-semibold mb-4">Get In Touch</h3>
             <p className="text-sm text-gray-300 leading-relaxed mb-6">
               Connect with our campaign strategy teams for custom brokerage planning or media kit integrations.
             </p>
-            <div className="space-y-3 text-sm text-gray-300">
-              <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-accent" />
-                <span>support@influencebridge.com</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-accent" />
-                <span>+91 88818 00808</span>
-              </div>
+            <div className="flex justify-center items-center gap-3 text-base text-gray-300 mb-6">
+              <Mail className="w-5 h-5 text-accent" />
+              <span className="font-medium">info@oravate.in</span>
             </div>
           </div>
-          <div className="mt-8">
+          <div className="mt-4">
             <Link href="/start-campaign">
-              <Button className="rounded-lg uppercase text-xs font-bold tracking-wider px-6 h-12 bg-gradient-to-r from-[#7f00ff] via-[#b163ff] to-[#d49cff] text-white hover:opacity-95 transition-all shadow-lg hover:shadow-[#7f00ff]/20 btn-premium">
+              <Button className="rounded-lg uppercase text-xs font-bold tracking-wider px-8 h-12 bg-gradient-to-r from-[#7f00ff] via-[#b163ff] to-[#d49cff] text-white hover:opacity-95 transition-all shadow-lg hover:shadow-[#7f00ff]/20 btn-premium">
                 Plan Your Campaign
               </Button>
             </Link>
