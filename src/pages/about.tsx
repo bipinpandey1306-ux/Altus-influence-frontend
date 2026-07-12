@@ -106,10 +106,10 @@ export default function AboutUs() {
             <p className="text-sm text-gray-300 leading-relaxed mb-6">
               Connect with our campaign strategy teams for custom brokerage planning or media kit integrations.
             </p>
-            <div className="flex justify-center items-center gap-3 text-base text-gray-300 mb-6">
+            <a href="mailto:info@oravate.in" className="flex justify-center items-center gap-3 text-base text-gray-300 hover:text-accent transition-colors mb-6 inline-flex">
               <Mail className="w-5 h-5 text-accent" />
               <span className="font-medium">info@oravate.in</span>
-            </div>
+            </a>
           </div>
           <div className="mt-4">
             <Link href="/start-campaign">

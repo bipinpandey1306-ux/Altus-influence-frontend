@@ -220,9 +220,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="space-y-2">
               <span className="text-[10px] uppercase font-bold tracking-wider text-accent block">Contact Channels</span>
               <div className="space-y-1.5 font-medium">
-                <span className="flex items-center gap-1.5 text-gray-300">
+                <a href="mailto:info@oravate.in" className="flex items-center gap-1.5 text-gray-300 hover:text-accent transition-colors">
                   <span className="w-1.5 h-1.5 rounded-full bg-accent" /> info@oravate.in
-                </span>
+                </a>
               </div>
             </div>
 
