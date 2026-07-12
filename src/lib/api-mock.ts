@@ -35,53 +35,7 @@ export interface CaseStudy {
 }
 
 // Initial mock data
-const INITIAL_INFLUENCERS: Influencer[] = [
-  {
-    id: "inf1",
-    name: "Technical Guruji",
-    category: "Tech",
-    location: "Delhi",
-    bio: "India's leading tech YouTuber sharing reviews, news, and unboxings in simple Hindi.",
-    followers: 23100000,
-    engagementRate: 5.8,
-    rating: 4.8,
-    platform: "YouTube",
-    pricePerPostInr: 850000,
-    avatarUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&fit=crop&q=80",
-    tier: "Mega",
-    languages: ["Hindi", "English"]
-  },
-  {
-    id: "inf3",
-    name: "Mumbiker Nikhil",
-    category: "Lifestyle",
-    location: "Mumbai",
-    bio: "Popular motovlogger and lifestyle creator documenting daily adventures and travel logs across India.",
-    followers: 4300000,
-    engagementRate: 4.2,
-    rating: 4.6,
-    platform: "YouTube",
-    pricePerPostInr: 300000,
-    avatarUrl: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&fit=crop&q=80",
-    tier: "Mega",
-    languages: ["Hindi", "English"]
-  },
-  {
-    id: "inf5",
-    name: "Amit Bhadana",
-    category: "Lifestyle",
-    location: "Delhi",
-    bio: "Folk comedy writer and creator producing short movies, relatable family sketches, and music tracks on YouTube.",
-    followers: 24300000,
-    engagementRate: 6.5,
-    rating: 4.7,
-    platform: "YouTube",
-    pricePerPostInr: 1200000,
-    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&fit=crop&q=80",
-    tier: "Mega",
-    languages: ["Hindi", "English"]
-  }
-];
+const INITIAL_INFLUENCERS: Influencer[] = [];
 
 const MOCK_CASE_STUDIES: CaseStudy[] = [
   {
@@ -134,17 +88,20 @@ function getInfluencers(): Influencer[] {
   }
   try {
     const parsed = JSON.parse(data);
-    const hasDeletedInfluencers = parsed.some((inf: any) => 
-      inf.name === "Ranveer Allahbadia" || 
-      inf.name === "Kusha Kapila" || 
-      inf.name === "Jannat Zubair"
+    const hasOldMockData = parsed.some((inf: any) => 
+      inf.id === "inf1" || 
+      inf.id === "inf2" || 
+      inf.id === "inf3" || 
+      inf.id === "inf4" || 
+      inf.id === "inf5" || 
+      inf.id === "inf6"
     );
     // If the saved data contains empty avatars (from previous checkpoint) or old ID structures, or the deleted influencers, refresh once
     if (
       Array.isArray(parsed) && 
       (parsed.length === 0 || 
        !parsed[0].avatarUrl || 
-       hasDeletedInfluencers ||
+       hasOldMockData ||
        parsed.some((inf: any) => ["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(inf.id)))
     ) {
       localStorage.setItem("ib_influencers", JSON.stringify(INITIAL_INFLUENCERS));
