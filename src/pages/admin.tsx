@@ -304,36 +304,41 @@ export default function AdminPanel() {
 
   if (!isAuthenticated) {
     return (
-      <div className="flex-1 flex items-center justify-center py-24 px-4 bg-gradient-to-br from-background via-[#fdfdfd] to-secondary/30">
-        <Card className="w-full max-w-md rounded-none border border-border shadow-xl bg-card p-8 flex flex-col gap-6 relative overflow-hidden">
+      <div className="flex-1 flex items-center justify-center py-24 px-4 bg-background relative z-10">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+          <div className="absolute top-[20%] right-[-10%] w-[350px] h-[350px] rounded-full bg-[#7f00ff]/10 blur-[100px]" />
+          <div className="absolute bottom-[20%] left-[-10%] w-[350px] h-[350px] rounded-full bg-[#b163ff]/8 blur-[100px]" />
+        </div>
+
+        <Card className="w-full max-w-md rounded-2xl border border-border shadow-2xl bg-card/60 backdrop-blur-md p-8 flex flex-col gap-6 relative overflow-hidden z-10">
           {/* Subtle neon top border */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary" />
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#7f00ff] via-[#b163ff] to-[#d49cff]" />
           
           <div className="text-center space-y-2">
-            <div className="mx-auto w-12 h-12 bg-primary/10 text-primary flex items-center justify-center border border-primary/20 mb-4">
+            <div className="mx-auto w-12 h-12 bg-[#7f00ff]/10 text-accent flex items-center justify-center border border-[#7f00ff]/30 rounded-xl mb-4">
               <Lock className="w-6 h-6" />
             </div>
-            <h2 className="text-3xl font-serif font-bold text-foreground">Admin Authorization</h2>
-            <p className="text-xs text-muted-foreground uppercase tracking-widest">Restricted Access Portal</p>
+            <h2 className="text-3xl font-serif font-bold text-white">Admin Authorization</h2>
+            <p className="text-xs text-gray-400 uppercase tracking-widest">Restricted Access Portal</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs uppercase tracking-wider font-bold text-foreground">Password</label>
+              <label className="text-xs uppercase tracking-wider font-bold text-gray-300">Password</label>
               <Input
                 type="password"
                 placeholder="Enter Administrator Password"
-                className="rounded-none h-12 bg-transparent text-base border-border focus-visible:ring-primary"
+                className="rounded-lg h-12 bg-background/50 text-base border-border hover:border-border-strong text-white focus-visible:ring-accent"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoFocus
               />
-              {error && <p className="text-xs text-destructive font-medium mt-1">{error}</p>}
+              {error && <p className="text-xs text-rose-500 font-medium mt-1">{error}</p>}
             </div>
 
             <Button
               type="submit"
-              className="w-full h-12 rounded-none uppercase text-xs font-bold tracking-widest bg-primary text-primary-foreground hover:bg-primary/95 transition-all mt-2"
+              className="w-full h-12 rounded-lg uppercase text-xs font-bold tracking-widest bg-gradient-to-r from-[#7f00ff] via-[#b163ff] to-[#d49cff] text-white hover:opacity-95 transition-all mt-2 btn-premium"
             >
               Access Dashboard
             </Button>
@@ -344,18 +349,18 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-7xl">
-      <div className="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b border-border/60 pb-6">
+    <div className="container mx-auto px-4 py-12 max-w-7xl relative z-10">
+      <div className="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b border-border/20 pb-6">
         <div>
-          <span className="bg-primary/10 text-primary px-3 py-1 text-xs font-bold uppercase tracking-wider border border-primary/20">
+          <span className="bg-[#7f00ff]/10 text-accent px-3 py-1 text-xs font-bold uppercase tracking-wider border border-[#7f00ff]/20 rounded-md">
             Admin Portal
           </span>
-          <h1 className="text-5xl font-serif mt-3 mb-2">Creator Management Dashboard</h1>
-          <p className="text-lg text-muted-foreground">Add, update, or remove influencers in the system database.</p>
+          <h1 className="text-5xl font-serif text-white font-semibold mt-3 mb-2">Creator Management Dashboard</h1>
+          <p className="text-lg text-gray-300">Add, update, or remove influencers in the system database.</p>
         </div>
         <Button 
           variant="outline"
-          className="rounded-none uppercase text-xs font-bold tracking-widest border-destructive/30 hover:bg-destructive hover:text-white transition-colors h-11 px-6 flex items-center gap-2 self-start md:self-end"
+          className="rounded-lg uppercase text-xs font-bold tracking-widest border border-destructive/40 text-rose-400 hover:bg-destructive hover:text-white transition-colors h-11 px-6 flex items-center gap-2 self-start md:self-end"
           onClick={() => {
             localStorage.removeItem("altus_admin_auth");
             setIsAuthenticated(false);
@@ -371,36 +376,36 @@ export default function AdminPanel() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <Card className="rounded-none border-border shadow-md">
+        <Card className="rounded-2xl border border-border bg-card/60 backdrop-blur-md shadow-md hover:shadow-hover hover:-translate-y-1 transition-all duration-300">
           <CardContent className="p-6 flex items-center gap-4">
-            <div className="bg-primary/10 p-3 text-primary">
+            <div className="bg-[#7f00ff]/10 border border-[#7f00ff]/25 p-3 text-accent rounded-xl">
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs uppercase text-muted-foreground font-medium block">Total Registered</span>
-              <span className="text-3xl font-serif font-bold">{totalCreators}</span>
+              <span className="text-xs uppercase text-gray-400 font-medium block">Total Registered</span>
+              <span className="text-3xl font-serif font-bold text-white">{totalCreators}</span>
             </div>
           </CardContent>
         </Card>
-        <Card className="rounded-none border-border shadow-md">
+        <Card className="rounded-2xl border border-border bg-card/60 backdrop-blur-md shadow-md hover:shadow-hover hover:-translate-y-1 transition-all duration-300">
           <CardContent className="p-6 flex items-center gap-4">
-            <div className="bg-emerald-500/10 p-3 text-emerald-500">
+            <div className="bg-emerald-500/10 border border-emerald-500/25 p-3 text-emerald-400 rounded-xl">
               <DollarSign className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs uppercase text-muted-foreground font-medium block">Avg Price Per Post</span>
-              <span className="text-3xl font-serif font-bold">{formatINR(avgPrice)}</span>
+              <span className="text-xs uppercase text-gray-400 font-medium block">Avg Price Per Post</span>
+              <span className="text-3xl font-serif font-bold text-white">{formatINR(avgPrice)}</span>
             </div>
           </CardContent>
         </Card>
-        <Card className="rounded-none border-border shadow-md">
+        <Card className="rounded-2xl border border-border bg-card/60 backdrop-blur-md shadow-md hover:shadow-hover hover:-translate-y-1 transition-all duration-300">
           <CardContent className="p-6 flex items-center gap-4">
-            <div className="bg-amber-500/10 p-3 text-amber-500">
+            <div className="bg-amber-500/10 border border-amber-500/25 p-3 text-amber-400 rounded-xl">
               <Activity className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs uppercase text-muted-foreground font-medium block">Avg Engagement Rate</span>
-              <span className="text-3xl font-serif font-bold">{avgEng}%</span>
+              <span className="text-xs uppercase text-gray-400 font-medium block">Avg Engagement Rate</span>
+              <span className="text-3xl font-serif font-bold text-accent">{avgEng}%</span>
             </div>
           </CardContent>
         </Card>
@@ -409,12 +414,12 @@ export default function AdminPanel() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Add / Edit Form */}
         <div className="lg:col-span-4">
-          <Card className="rounded-none border-border shadow-md sticky top-24">
+          <Card className="rounded-2xl border border-border bg-card/60 backdrop-blur-md shadow-md sticky top-24">
             <CardHeader>
-              <CardTitle className="font-serif text-2xl">
+              <CardTitle className="font-serif text-2xl text-white font-semibold">
                 {editingId ? "Edit Influencer Details" : "Register New Creator"}
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-gray-300">
                 {editingId ? "Modify fields below to update creator profile." : "Fill details below to add a creator to directory."}
               </CardDescription>
             </CardHeader>
@@ -427,9 +432,9 @@ export default function AdminPanel() {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs uppercase tracking-wider font-bold">Creator Name</FormLabel>
+                        <FormLabel className="text-xs uppercase tracking-wider font-semibold text-gray-300">Creator Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. Rohan Sharma" className="rounded-none" {...field} />
+                          <Input placeholder="e.g. Rohan Sharma" className="rounded-lg bg-background/50 border border-border text-white focus-visible:ring-accent" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -443,14 +448,14 @@ export default function AdminPanel() {
                       name="platform"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs uppercase tracking-wider font-bold">Platform</FormLabel>
+                          <FormLabel className="text-xs uppercase tracking-wider font-semibold text-gray-300">Platform</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                             <FormControl>
-                              <SelectTrigger className="rounded-none">
+                              <SelectTrigger className="rounded-lg bg-background/50 border border-border text-white focus:ring-accent">
                                 <SelectValue placeholder="Platform" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="rounded-none">
+                            <SelectContent className="rounded-md bg-popover border border-border text-white">
                               <SelectItem value="Instagram">Instagram</SelectItem>
                               <SelectItem value="YouTube">YouTube</SelectItem>
                               <SelectItem value="LinkedIn">LinkedIn</SelectItem>
@@ -468,14 +473,14 @@ export default function AdminPanel() {
                       name="category"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs uppercase tracking-wider font-bold">Category</FormLabel>
+                          <FormLabel className="text-xs uppercase tracking-wider font-semibold text-gray-300">Category</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                             <FormControl>
-                              <SelectTrigger className="rounded-none">
+                              <SelectTrigger className="rounded-lg bg-background/50 border border-border text-white focus:ring-accent">
                                 <SelectValue placeholder="Category" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="rounded-none">
+                            <SelectContent className="rounded-md bg-popover border border-border text-white">
                               <SelectItem value="Tech">Tech</SelectItem>
                               <SelectItem value="Finance">Finance</SelectItem>
                               <SelectItem value="Fashion">Fashion</SelectItem>
@@ -496,9 +501,9 @@ export default function AdminPanel() {
                       name="followers"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs uppercase tracking-wider font-bold">Followers</FormLabel>
+                          <FormLabel className="text-xs uppercase tracking-wider font-semibold text-gray-300">Followers</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g. 150000" className="rounded-none" {...field} />
+                            <Input placeholder="e.g. 150000" className="rounded-lg bg-background/50 border border-border text-white focus-visible:ring-accent" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -511,9 +516,9 @@ export default function AdminPanel() {
                       name="pricePerPostInr"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs uppercase tracking-wider font-bold">Post Price (INR)</FormLabel>
+                          <FormLabel className="text-xs uppercase tracking-wider font-semibold text-gray-300">Post Price (INR)</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g. 25000" className="rounded-none" {...field} />
+                            <Input placeholder="e.g. 25000" className="rounded-lg bg-background/50 border border-border text-white focus-visible:ring-accent font-serif" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -528,9 +533,9 @@ export default function AdminPanel() {
                       name="engagementRate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs uppercase tracking-wider font-bold">Engagement %</FormLabel>
+                          <FormLabel className="text-xs uppercase tracking-wider font-semibold text-gray-300">Engagement %</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g. 5.2" className="rounded-none" {...field} />
+                            <Input placeholder="e.g. 5.2" className="rounded-lg bg-background/50 border border-border text-white focus-visible:ring-accent" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -543,14 +548,14 @@ export default function AdminPanel() {
                       name="location"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs uppercase tracking-wider font-bold">Location (State)</FormLabel>
+                          <FormLabel className="text-xs uppercase tracking-wider font-semibold text-gray-300">Location (State)</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                             <FormControl>
-                              <SelectTrigger className="rounded-none">
+                              <SelectTrigger className="rounded-lg bg-background/50 border border-border text-white focus:ring-accent">
                                 <SelectValue placeholder="Select State" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="rounded-none">
+                            <SelectContent className="rounded-md bg-popover border border-border text-white">
                               <SelectItem value="Mumbai">Maharashtra</SelectItem>
                               <SelectItem value="Bangalore">Karnataka</SelectItem>
                               <SelectItem value="Delhi">Delhi</SelectItem>
@@ -574,11 +579,11 @@ export default function AdminPanel() {
                     name="bio"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs uppercase tracking-wider font-bold">Creator Bio</FormLabel>
+                        <FormLabel className="text-xs uppercase tracking-wider font-semibold text-gray-300">Creator Bio</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Briefly describe content style and audience reach details..." 
-                            className="rounded-none h-24" 
+                            className="rounded-lg bg-background/50 border border-border text-white focus-visible:ring-accent h-24 resize-none" 
                             {...field} 
                           />
                         </FormControl>
@@ -591,7 +596,7 @@ export default function AdminPanel() {
                   <div className="flex gap-2 pt-2">
                     <Button 
                       type="submit" 
-                      className="flex-1 rounded-none uppercase text-xs font-bold tracking-wider"
+                      className="flex-1 rounded-lg uppercase text-xs font-bold tracking-wider bg-gradient-to-r from-[#7f00ff] via-[#b163ff] to-[#d49cff] text-white hover:opacity-95 btn-premium h-11"
                       disabled={createMutation.isPending || updateMutation.isPending}
                     >
                       {editingId ? "Save Profile" : "Add Creator"}
@@ -600,7 +605,7 @@ export default function AdminPanel() {
                       <Button 
                         type="button" 
                         variant="outline"
-                        className="rounded-none uppercase text-xs font-bold tracking-wider"
+                        className="rounded-lg uppercase text-xs font-bold tracking-wider border border-border text-accent hover:bg-white/5 h-11 px-4"
                         onClick={handleCancelEdit}
                       >
                         Cancel
@@ -615,12 +620,12 @@ export default function AdminPanel() {
 
         {/* Right Column: Database Table */}
         <div className="lg:col-span-8 space-y-6">
-          <h2 className="text-2xl font-serif">Registered Creator Profiles</h2>
+          <h2 className="text-2xl font-serif text-white font-semibold">Registered Creator Profiles</h2>
           
-          <Card className="rounded-none border-border shadow-md overflow-hidden">
+          <Card className="rounded-2xl border border-border bg-card/60 backdrop-blur-md shadow-md overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="bg-secondary text-secondary-foreground text-xs uppercase tracking-wider border-b">
+                <thead className="bg-[#0e0019]/90 text-gray-300 border-b border-border/40 text-xs uppercase tracking-wider">
                   <tr>
                     <th className="px-6 py-4">Creator</th>
                     <th className="px-6 py-4">Platform</th>
@@ -629,37 +634,37 @@ export default function AdminPanel() {
                     <th className="px-6 py-4 text-center">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/60">
+                <tbody className="divide-y divide-border/40">
                   {isLoading ? (
                     <tr>
-                      <td colSpan={5} className="text-center py-10 text-muted-foreground">
+                      <td colSpan={5} className="text-center py-10 text-gray-400">
                         Loading database...
                       </td>
                     </tr>
                   ) : influencers?.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-center py-12 text-muted-foreground">
+                      <td colSpan={5} className="text-center py-12 text-gray-400">
                         No creators registered yet. Use the form on the left to add the first profile!
                       </td>
                     </tr>
                   ) : (
                     influencers?.map((inf) => (
-                      <tr key={inf.id} className="hover:bg-muted/50 transition-colors">
+                      <tr key={inf.id} className="hover:bg-[#7f00ff]/5 transition-colors">
                         <td className="px-6 py-4 font-medium">
                           <div>
-                            <span className="text-base text-foreground font-semibold block">{inf.name}</span>
-                            <span className="text-xs text-muted-foreground uppercase">{inf.category} • {inf.location}</span>
+                            <span className="text-base text-white font-semibold block">{inf.name}</span>
+                            <span className="text-xs text-gray-400 uppercase">{inf.category} • {inf.location}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 text-xs font-medium uppercase tracking-wider">
+                          <span className="bg-accent/10 text-accent border border-accent/20 rounded-md px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider">
                             {inf.platform}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-right font-medium">
+                        <td className="px-6 py-4 text-right font-medium text-white">
                           {formatCompactNumber(inf.followers)}
                         </td>
-                        <td className="px-6 py-4 text-right font-medium text-primary">
+                        <td className="px-6 py-4 text-right font-medium text-accent">
                           {formatINR(inf.pricePerPostInr)}
                         </td>
                         <td className="px-6 py-4 text-center">
@@ -667,7 +672,7 @@ export default function AdminPanel() {
                             <Button 
                               variant="ghost" 
                               size="icon" 
-                              className="h-8 w-8 text-muted-foreground hover:text-primary rounded-none"
+                              className="h-8 w-8 text-gray-400 hover:text-accent rounded-lg"
                               onClick={() => handleEditClick(inf)}
                             >
                               <Edit2 className="w-4 h-4" />
@@ -675,7 +680,7 @@ export default function AdminPanel() {
                             <Button 
                               variant="ghost" 
                               size="icon" 
-                              className="h-8 w-8 text-muted-foreground hover:text-destructive rounded-none"
+                              className="h-8 w-8 text-gray-400 hover:text-rose-500 rounded-lg"
                               onClick={() => handleDeleteClick(inf.id, inf.name)}
                             >
                               <Trash2 className="w-4 h-4" />

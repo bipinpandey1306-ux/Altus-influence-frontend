@@ -75,13 +75,13 @@ export default function EarningsCalculator() {
   const followerStep = platform === "instagram" ? 5000 : 10000;
 
   return (
-    <div className="container mx-auto px-4 py-16 max-w-4xl">
+    <div className="container mx-auto px-4 py-16 max-w-4xl relative z-10">
       <div className="text-center mb-12">
-        <span className="bg-primary/10 text-primary px-3 py-1 text-xs font-bold uppercase tracking-wider border border-primary/20">
+        <span className="bg-primary/10 text-accent px-3 py-1 text-xs font-bold uppercase tracking-wider border border-border/40 rounded-md">
           Interactive Tool
         </span>
-        <h1 className="text-5xl md:text-6xl font-serif mt-4 mb-4">Influencer Earnings Calculator</h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <h1 className="text-5xl md:text-6xl font-serif text-white font-semibold mt-4 mb-4">Influencer Earnings Calculator</h1>
+        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
           Get real-time fair market value estimates for paid promotions in the Indian creator economy.
         </p>
       </div>
@@ -89,11 +89,11 @@ export default function EarningsCalculator() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         {/* Left Column: Controls */}
         <div className="md:col-span-7 space-y-8">
-          <Card className="rounded-none border-border/60 shadow-xl bg-card">
+          <Card className="rounded-2xl border border-border bg-card/60 backdrop-blur-md shadow-xl">
             <CardContent className="p-8 space-y-8">
               {/* Platform Selector */}
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-3">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-3">
                   Select Channel / Platform
                 </label>
                 <div className="grid grid-cols-2 gap-4">
@@ -103,10 +103,10 @@ export default function EarningsCalculator() {
                       setFollowers(100000);
                       setEngagement(5.0);
                     }}
-                    className={`flex items-center justify-center gap-2 h-14 border rounded-none font-medium transition-all ${
+                    className={`flex items-center justify-center gap-2 h-14 border rounded-lg font-medium transition-all ${
                       platform === "instagram"
-                        ? "border-primary bg-primary/5 text-primary shadow-sm"
-                        : "border-border hover:bg-muted text-muted-foreground"
+                        ? "border-accent bg-accent/15 text-accent shadow-sm"
+                        : "border-border hover:bg-white/5 text-gray-400 hover:text-white"
                     }`}
                   >
                     <Instagram className="w-5 h-5" /> Instagram
@@ -117,10 +117,10 @@ export default function EarningsCalculator() {
                       setFollowers(250000);
                       setEngagement(3.5);
                     }}
-                    className={`flex items-center justify-center gap-2 h-14 border rounded-none font-medium transition-all ${
+                    className={`flex items-center justify-center gap-2 h-14 border rounded-lg font-medium transition-all ${
                       platform === "youtube"
-                        ? "border-primary bg-primary/5 text-primary shadow-sm"
-                        : "border-border hover:bg-muted text-muted-foreground"
+                        ? "border-accent bg-accent/15 text-accent shadow-sm"
+                        : "border-border hover:bg-white/5 text-gray-400 hover:text-white"
                     }`}
                   >
                     <Youtube className="w-5 h-5" /> YouTube
@@ -131,10 +131,10 @@ export default function EarningsCalculator() {
               {/* Followers Slider */}
               <div className="space-y-4">
                 <div className="flex justify-between items-baseline">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-gray-300">
                     {platform === "instagram" ? "Followers Count" : "Subscribers Count"}
                   </label>
-                  <span className="text-2xl font-serif font-semibold">
+                  <span className="text-2xl font-serif text-white font-semibold">
                     {formatCompactNumber(followers)}
                   </span>
                 </div>
@@ -146,7 +146,7 @@ export default function EarningsCalculator() {
                   step={followerStep}
                   className="py-4"
                 />
-                <div className="flex justify-between text-[10px] uppercase text-muted-foreground/60">
+                <div className="flex justify-between text-[10px] uppercase text-gray-400">
                   <span>5K</span>
                   <span>{formatCompactNumber(maxFollowers / 2)}</span>
                   <span>{formatCompactNumber(maxFollowers)}</span>
@@ -156,10 +156,10 @@ export default function EarningsCalculator() {
               {/* Engagement Rate Slider */}
               <div className="space-y-4">
                 <div className="flex justify-between items-baseline">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-gray-300">
                     Average Engagement Rate
                   </label>
-                  <span className="text-2xl font-serif font-semibold text-primary">
+                  <span className="text-2xl font-serif font-semibold text-accent">
                     {engagement.toFixed(1)}%
                   </span>
                 </div>
@@ -171,7 +171,7 @@ export default function EarningsCalculator() {
                   step={0.1}
                   className="py-4"
                 />
-                <div className="flex justify-between text-[10px] uppercase text-muted-foreground/60">
+                <div className="flex justify-between text-[10px] uppercase text-gray-400">
                   <span>1.0% (Low)</span>
                   <span>4.5% (Avg)</span>
                   <span>15.0% (Elite)</span>
@@ -183,64 +183,64 @@ export default function EarningsCalculator() {
 
         {/* Right Column: Calculations */}
         <div className="md:col-span-5 flex flex-col justify-between h-full space-y-6">
-          <Card className="rounded-none border-primary/20 shadow-xl bg-gradient-to-br from-primary/5 via-card to-card relative overflow-hidden flex-1">
+          <Card className="rounded-2xl border border-border bg-card/60 backdrop-blur-md shadow-xl bg-gradient-to-br from-[#7f00ff]/10 via-[#0e0019]/60 to-[#0e0019]/60 relative overflow-hidden flex-1">
             <CardContent className="p-8 flex flex-col justify-between h-full">
               <div className="absolute top-0 right-0 p-4 opacity-10">
-                <Sparkles className="w-16 h-16 text-primary" />
+                <Sparkles className="w-16 h-16 text-accent" />
               </div>
 
               <div className="space-y-6">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-primary border-b pb-2">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-accent border-b border-border/40 pb-2">
                   Estimated Rates
                 </h3>
 
                 <div className="space-y-2">
-                  <span className="text-xs uppercase text-muted-foreground font-medium block">
+                  <span className="text-xs uppercase text-gray-300 font-medium block">
                     {estimates.primaryLabel}
                   </span>
-                  <span className="text-4xl font-serif text-foreground font-bold">
+                  <span className="text-4xl font-serif text-white font-bold">
                     {formatINR(estimates.primaryVal)}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 border-t pt-4">
+                <div className="grid grid-cols-2 gap-4 border-t border-border/40 pt-4">
                   <div>
-                    <span className="text-[10px] uppercase text-muted-foreground block mb-1">
+                    <span className="text-[10px] uppercase text-gray-400 block mb-1">
                       {estimates.secondaryLabel}
                     </span>
-                    <span className="text-lg font-serif font-semibold">
+                    <span className="text-lg font-serif font-semibold text-white">
                       {formatINR(estimates.secondaryVal)}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase text-muted-foreground block mb-1">
+                    <span className="text-[10px] uppercase text-gray-400 block mb-1">
                       {estimates.tertiaryLabel}
                     </span>
-                    <span className="text-lg font-serif font-semibold">
+                    <span className="text-lg font-serif font-semibold text-white">
                       {formatINR(estimates.tertiaryVal)}
                     </span>
                   </div>
                 </div>
 
-                <div className="border-t pt-4">
-                  <span className="text-[10px] uppercase text-muted-foreground block mb-1">
+                <div className="border-t border-border/40 pt-4">
+                  <span className="text-[10px] uppercase text-gray-400 block mb-1">
                     {platform === "instagram" ? "Estimated Organic Reach" : "Estimated Video Views"}
                   </span>
-                  <span className="text-xl font-serif text-foreground font-medium">
-                    {formatCompactNumber(estimates.estReach)} <span className="text-xs font-sans text-muted-foreground">/ campaign post</span>
+                  <span className="text-xl font-serif text-white font-medium">
+                    {formatCompactNumber(estimates.estReach)} <span className="text-xs font-sans text-gray-400">/ campaign post</span>
                   </span>
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t">
+              <div className="mt-8 pt-6 border-t border-border/40">
                 <Link
                   href={`/start-campaign?budget=${estimates.primaryVal * 2}&platform=${platform === "instagram" ? "Instagram" : "YouTube"}`}
                 >
-                  <Button className="w-full rounded-none h-14 text-sm font-semibold uppercase tracking-wider">
+                  <Button className="w-full rounded-lg h-14 text-sm font-semibold uppercase tracking-wider bg-gradient-to-r from-[#7f00ff] via-[#b163ff] to-[#d49cff] text-white hover:opacity-95 transition-all shadow-lg hover:shadow-[#7f00ff]/20 btn-premium">
                     Plan Campaign <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
-                <span className="text-[10px] text-muted-foreground/60 text-center block mt-3 leading-relaxed">
+                <span className="text-[10px] text-gray-400 text-center block mt-3 leading-relaxed">
                   *Estimates are calculated using regional brand benchmarks (ASCI compliant) and exclude agency commissions.
                 </span>
               </div>

@@ -63,35 +63,37 @@ export default function JoinInfluencer() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16 max-w-3xl">
+    <div className="container mx-auto px-4 py-16 max-w-3xl relative z-10">
       <div className="mb-12 text-center">
-        <h1 className="text-5xl mb-4">Join the Network</h1>
-        <p className="text-xl text-muted-foreground">Monetize your influence with India's top brands.</p>
+        <h1 className="text-5xl mb-4 text-white font-semibold font-serif">Join the Network</h1>
+        <p className="text-xl text-gray-300">Monetize your influence with India's top brands.</p>
       </div>
 
-      <Card className="rounded-none border-border shadow-xl">
+      <Card className="rounded-2xl border border-border bg-card/60 backdrop-blur-md shadow-xl">
         <CardContent className="p-8 md:p-12">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField control={form.control} name="name" render={({ field }) => (
-                  <FormItem><FormLabel className="uppercase text-[10px] tracking-wider">Full Name / Handle</FormLabel><FormControl><Input className="rounded-none h-12 bg-muted/50" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel className="uppercase text-[10px] tracking-wider text-gray-300 font-semibold">Full Name / Handle</FormLabel><FormControl><Input className="rounded-lg h-12 bg-background/50 border border-border hover:border-border-strong text-white focus-visible:ring-1 focus-visible:ring-accent" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="location" render={({ field }) => (
-                  <FormItem><FormLabel className="uppercase text-[10px] tracking-wider">Primary Location</FormLabel><FormControl><Input className="rounded-none h-12 bg-muted/50" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel className="uppercase text-[10px] tracking-wider text-gray-300 font-semibold">Primary Location</FormLabel><FormControl><Input className="rounded-lg h-12 bg-background/50 border border-border hover:border-border-strong text-white focus-visible:ring-1 focus-visible:ring-accent" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField control={form.control} name="platform" render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="uppercase text-[10px] tracking-wider">Primary Platform</FormLabel>
+                    <FormLabel className="uppercase text-[10px] tracking-wider text-gray-300 font-semibold">Primary Platform</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="rounded-none h-12 bg-muted/50"><SelectValue placeholder="Select platform" /></SelectTrigger>
+                        <SelectTrigger className="rounded-lg h-12 bg-background/50 border border-border text-white focus:ring-1 focus:ring-accent">
+                          <SelectValue placeholder="Select platform" />
+                        </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="rounded-none">
+                      <SelectContent className="rounded-md bg-popover border border-border text-white">
                         <SelectItem value="Instagram">Instagram</SelectItem>
                         <SelectItem value="YouTube">YouTube</SelectItem>
                         <SelectItem value="LinkedIn">LinkedIn</SelectItem>
@@ -103,12 +105,14 @@ export default function JoinInfluencer() {
                 )} />
                 <FormField control={form.control} name="category" render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="uppercase text-[10px] tracking-wider">Niche / Category</FormLabel>
+                    <FormLabel className="uppercase text-[10px] tracking-wider text-gray-300 font-semibold">Niche / Category</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="rounded-none h-12 bg-muted/50"><SelectValue placeholder="Select category" /></SelectTrigger>
+                        <SelectTrigger className="rounded-lg h-12 bg-background/50 border border-border text-white focus:ring-1 focus:ring-accent">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="rounded-none">
+                      <SelectContent className="rounded-md bg-popover border border-border text-white">
                         <SelectItem value="Tech">Tech</SelectItem>
                         <SelectItem value="Fashion">Fashion</SelectItem>
                         <SelectItem value="Finance">Finance</SelectItem>
@@ -123,25 +127,25 @@ export default function JoinInfluencer() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <FormField control={form.control} name="followers" render={({ field }) => (
-                  <FormItem><FormLabel className="uppercase text-[10px] tracking-wider">Follower Count</FormLabel><FormControl><Input type="number" className="rounded-none h-12 bg-muted/50" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel className="uppercase text-[10px] tracking-wider text-gray-300 font-semibold">Follower Count</FormLabel><FormControl><Input type="number" className="rounded-lg h-12 bg-background/50 border border-border hover:border-border-strong text-white focus-visible:ring-1 focus-visible:ring-accent" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="engagementRate" render={({ field }) => (
-                  <FormItem><FormLabel className="uppercase text-[10px] tracking-wider">Avg Engagement (%)</FormLabel><FormControl><Input type="number" step="0.1" className="rounded-none h-12 bg-muted/50" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel className="uppercase text-[10px] tracking-wider text-gray-300 font-semibold">Avg Engagement (%)</FormLabel><FormControl><Input type="number" step="0.1" className="rounded-lg h-12 bg-background/50 border border-border hover:border-border-strong text-white focus-visible:ring-1 focus-visible:ring-accent" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="pricePerPostInr" render={({ field }) => (
-                  <FormItem><FormLabel className="uppercase text-[10px] tracking-wider">Rate per Post (INR)</FormLabel><FormControl><Input type="number" className="rounded-none h-12 bg-muted/50" {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel className="uppercase text-[10px] tracking-wider text-gray-300 font-semibold">Rate per Post (INR)</FormLabel><FormControl><Input type="number" className="rounded-lg h-12 bg-background/50 border border-border hover:border-border-strong text-white focus-visible:ring-1 focus-visible:ring-accent font-serif" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
               </div>
 
               <FormField control={form.control} name="bio" render={({ field }) => (
-                <FormItem><FormLabel className="uppercase text-[10px] tracking-wider">Short Bio</FormLabel><FormControl><Textarea className="rounded-none min-h-[100px] bg-muted/50 resize-none" {...field} /></FormControl><FormMessage /></FormItem>
+                <FormItem><FormLabel className="uppercase text-[10px] tracking-wider text-gray-300 font-semibold">Short Bio</FormLabel><FormControl><Textarea className="rounded-lg min-h-[100px] bg-background/50 border border-border hover:border-border-strong text-white focus-visible:ring-1 focus-visible:ring-accent resize-none" {...field} /></FormControl><FormMessage /></FormItem>
               )} />
               
               <FormField control={form.control} name="avatarUrl" render={({ field }) => (
-                <FormItem><FormLabel className="uppercase text-[10px] tracking-wider">Avatar Image URL (Optional)</FormLabel><FormControl><Input type="url" className="rounded-none h-12 bg-muted/50" placeholder="https://..." {...field} /></FormControl><FormMessage /></FormItem>
+                <FormItem><FormLabel className="uppercase text-[10px] tracking-wider text-gray-300 font-semibold">Avatar Image URL (Optional)</FormLabel><FormControl><Input type="url" className="rounded-lg h-12 bg-background/50 border border-border hover:border-border-strong text-white focus-visible:ring-1 focus-visible:ring-accent" placeholder="https://..." {...field} /></FormControl><FormMessage /></FormItem>
               )} />
 
-              <Button type="submit" disabled={applyMutation.isPending} className="w-full rounded-none h-16 text-lg tracking-wide uppercase font-medium mt-8">
+              <Button type="submit" disabled={applyMutation.isPending} className="w-full rounded-lg h-16 text-lg tracking-wide uppercase font-bold bg-gradient-to-r from-[#7f00ff] via-[#b163ff] to-[#d49cff] text-white hover:opacity-95 transition-all shadow-lg hover:shadow-[#7f00ff]/20 mt-8 btn-premium">
                 {applyMutation.isPending ? "Submitting..." : "Apply to Network"}
               </Button>
             </form>
