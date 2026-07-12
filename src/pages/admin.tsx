@@ -358,20 +358,39 @@ export default function AdminPanel() {
           <h1 className="text-5xl font-serif text-white font-semibold mt-3 mb-2">Creator Management Dashboard</h1>
           <p className="text-lg text-gray-300">Add, update, or remove influencers in the system database.</p>
         </div>
-        <Button 
-          variant="outline"
-          className="rounded-lg uppercase text-xs font-bold tracking-widest border border-destructive/40 text-rose-400 hover:bg-destructive hover:text-white transition-colors h-11 px-6 flex items-center gap-2 self-start md:self-end"
-          onClick={() => {
-            localStorage.removeItem("altus_admin_auth");
-            setIsAuthenticated(false);
-            toast({
-              title: "Logged Out",
-              description: "You have been logged out of the admin panel.",
-            });
-          }}
-        >
-          <LogOut className="w-4 h-4" /> Logout
-        </Button>
+        <div className="flex flex-wrap gap-3 self-start md:self-end">
+          <Button 
+            variant="outline"
+            className="rounded-lg uppercase text-xs font-bold tracking-widest border border-accent/40 text-accent hover:bg-accent hover:text-white transition-colors h-11 px-6 flex items-center gap-2"
+            onClick={() => {
+              if (confirm("Are you sure you want to reset the database to verified real creators? This will delete all user-added test profiles.")) {
+                localStorage.removeItem("ib_influencers");
+                queryClient.invalidateQueries({ queryKey: ["listInfluencers"] });
+                queryClient.invalidateQueries({ queryKey: ["platformStats"] });
+                toast({
+                  title: "Database Reset",
+                  description: "Database has been reset to verified real creators successfully.",
+                });
+              }
+            }}
+          >
+            Reset Database
+          </Button>
+          <Button 
+            variant="outline"
+            className="rounded-lg uppercase text-xs font-bold tracking-widest border border-destructive/40 text-rose-400 hover:bg-destructive hover:text-white transition-colors h-11 px-6 flex items-center gap-2"
+            onClick={() => {
+              localStorage.removeItem("altus_admin_auth");
+              setIsAuthenticated(false);
+              toast({
+                title: "Logged Out",
+                description: "You have been logged out of the admin panel.",
+              });
+            }}
+          >
+            <LogOut className="w-4 h-4" /> Logout
+          </Button>
+        </div>
       </div>
 
       {/* Stats Cards */}
