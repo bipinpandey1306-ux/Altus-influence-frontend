@@ -52,21 +52,6 @@ const INITIAL_INFLUENCERS: Influencer[] = [
     languages: ["Hindi", "English"]
   },
   {
-    id: "inf2",
-    name: "Ranveer Allahbadia",
-    category: "Business",
-    location: "Mumbai",
-    bio: "Co-founder of Monk Entertainment, hosting India's premier podcast covering self-improvement, tech, and startups.",
-    followers: 3200000,
-    engagementRate: 8.4,
-    rating: 4.9,
-    platform: "Instagram",
-    pricePerPostInr: 350000,
-    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&fit=crop&q=80",
-    tier: "Mega",
-    languages: ["Hindi", "English"]
-  },
-  {
     id: "inf3",
     name: "Mumbiker Nikhil",
     category: "Lifestyle",
@@ -82,21 +67,6 @@ const INITIAL_INFLUENCERS: Influencer[] = [
     languages: ["Hindi", "English"]
   },
   {
-    id: "inf4",
-    name: "Kusha Kapila",
-    category: "Lifestyle",
-    location: "Delhi",
-    bio: "Creative comic, actress, and internet personality crafting viral pop-culture satires and fashion reviews.",
-    followers: 3400000,
-    engagementRate: 9.1,
-    rating: 4.7,
-    platform: "Instagram",
-    pricePerPostInr: 450000,
-    avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&fit=crop&q=80",
-    tier: "Mega",
-    languages: ["Hindi", "English"]
-  },
-  {
     id: "inf5",
     name: "Amit Bhadana",
     category: "Lifestyle",
@@ -108,21 +78,6 @@ const INITIAL_INFLUENCERS: Influencer[] = [
     platform: "YouTube",
     pricePerPostInr: 1200000,
     avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&fit=crop&q=80",
-    tier: "Mega",
-    languages: ["Hindi", "English"]
-  },
-  {
-    id: "inf6",
-    name: "Jannat Zubair",
-    category: "Fashion",
-    location: "Mumbai",
-    bio: "High-trust television actress and visual content creator showcasing style trends and makeup reels.",
-    followers: 49200000,
-    engagementRate: 7.2,
-    rating: 4.8,
-    platform: "Instagram",
-    pricePerPostInr: 600000,
-    avatarUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&fit=crop&q=80",
     tier: "Mega",
     languages: ["Hindi", "English"]
   }
@@ -179,11 +134,17 @@ function getInfluencers(): Influencer[] {
   }
   try {
     const parsed = JSON.parse(data);
-    // If the saved data contains empty avatars (from previous checkpoint) or old ID structures, refresh once
+    const hasDeletedInfluencers = parsed.some((inf: any) => 
+      inf.name === "Ranveer Allahbadia" || 
+      inf.name === "Kusha Kapila" || 
+      inf.name === "Jannat Zubair"
+    );
+    // If the saved data contains empty avatars (from previous checkpoint) or old ID structures, or the deleted influencers, refresh once
     if (
       Array.isArray(parsed) && 
       (parsed.length === 0 || 
        !parsed[0].avatarUrl || 
+       hasDeletedInfluencers ||
        parsed.some((inf: any) => ["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(inf.id)))
     ) {
       localStorage.setItem("ib_influencers", JSON.stringify(INITIAL_INFLUENCERS));
